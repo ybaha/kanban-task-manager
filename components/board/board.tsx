@@ -55,20 +55,22 @@ const Board = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {boards[selectedBoardIndex]?.columns.map((column, index) => (
-        <BoardColumn
-          index={index}
-          tasks={column.tasks}
-          title={column.title}
-          key={column.id}
-          id={column.id}
-        />
-      ))}
-      {boards[selectedBoardIndex]?.columns.length > 0 ? (
-        <BoardColumn title="" />
-      ) : (
-        <></>
-      )}
+      <div className="flex gap-6">
+        {boards[selectedBoardIndex]?.columns.map((column, index) => (
+          <BoardColumn
+            index={index}
+            tasks={column.tasks}
+            title={column.title}
+            key={column.id}
+            id={column.id}
+          />
+        ))}
+        {boards[selectedBoardIndex]?.columns.length > 0 ? (
+          <BoardColumn title="" />
+        ) : (
+          <></>
+        )}
+      </div>
     </DragDropContext>
   );
 };
