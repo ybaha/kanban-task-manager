@@ -6,7 +6,6 @@ import { demoData } from "@utils/demo-data";
 type DataStore = {
   boards: Board[];
   setBoards: (boards: Board[]) => void;
-
   currentBoard: Board | null;
   setCurrentBoard: (board: Board) => void;
 };

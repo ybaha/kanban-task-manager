@@ -24,7 +24,7 @@ const BoardColumn = ({ tasks, title }: BoardColumnProps) => {
       <Droppable droppableId={title!}>
         {(provided) => (
           <ul
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 min-h-[300px]"
             {...provided.droppableProps}
             ref={provided.innerRef}
           >

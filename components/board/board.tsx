@@ -32,8 +32,10 @@ const Board = () => {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
+    console.log("destination: ", destination);
+    console.log("source: ", source);
 
-    if (!destination) {
+    if (!destination || !source) {
       return;
     }
 
@@ -41,6 +43,72 @@ const Board = () => {
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
+      return;
+    }
+    const start = boards[selectedBoardIndex].columns.find(
+      (column) => column.title === source.droppableId
+    );
+    const finish = boards[selectedBoardIndex].columns.find(
+      (column) => column.title === destination.droppableId
+    );
+
+    if (start === finish && start) {
+      const newTaskIds = Array.from(start.tasks);
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, start.tasks[source.index]);
+
+      const newColumn = {
+        ...start,
+        tasks: newTaskIds,
+      };
+
+      const newState = {
+        ...boards[selectedBoardIndex],
+        columns: boards[selectedBoardIndex].columns.map((column) =>
+          column.title === newColumn.title ? newColumn : column
+        ),
+      };
+
+      setBoards(
+        boards.map((board) =>
+          board.title === newState.title ? newState : board
+        )
+      );
+      return;
+    }
+
+    // Moving from one list to another
+    if (start && finish) {
+      const startTaskIds = Array.from(start.tasks);
+      startTaskIds.splice(source.index, 1);
+      const newStart = {
+        ...start,
+        tasks: startTaskIds,
+      };
+
+      const finishTaskIds = Array.from(finish.tasks);
+      finishTaskIds.splice(destination.index, 0, start.tasks[source.index]);
+      const newFinish = {
+        ...finish,
+        tasks: finishTaskIds,
+      };
+
+      const newState = {
+        ...boards[selectedBoardIndex],
+        columns: boards[selectedBoardIndex].columns.map((column) =>
+          column.title === newStart.title
+            ? newStart
+            : column.title === newFinish.title
+            ? newFinish
+            : column
+        ),
+      };
+
+      setBoards(
+        boards.map((board) =>
+          board.title === newState.title ? newState : board
+        )
+      );
       return;
     }
 
