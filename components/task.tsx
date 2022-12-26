@@ -1,10 +1,16 @@
-import { Task as TaskType } from "@customTypes/data";
+import { Board, Task as TaskType } from "@customTypes/data";
 import { Draggable } from "react-beautiful-dnd";
 import React from "react";
+import { useModalStore } from "@store/modal";
+import Modal from "./modal";
+import { useDataStore } from "@store/data";
 
 type TaskProps = { index: number } & TaskType;
 
-const Task = ({ title, index, subtasks, id }: TaskProps) => {
+const Task = ({ title, index, subtasks, id, description }: TaskProps) => {
+  const { setModal, setModalTaskData } = useModalStore();
+  const { currentBoard } = useDataStore();
+
   const subtasksLength = subtasks?.length;
   const subtasksCompleted = subtasks?.filter(
     (subtask) => subtask.iscompleted
@@ -14,6 +20,10 @@ const Task = ({ title, index, subtasks, id }: TaskProps) => {
     <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
         <div
+          onClick={() => {
+            setModal("task-view");
+            setModalTaskData({ description, id, subtasks, title });
+          }}
           className="rounded-lg bg-sky-900 p-3 cursor-pointer"
           {...provided.draggableProps}
           {...provided.dragHandleProps}

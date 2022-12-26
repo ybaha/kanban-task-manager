@@ -14,7 +14,13 @@ export const useDataStore = create<DataStore>()(
   persist(
     (set, get) => ({
       boards: [],
-      setBoards: (boards) => set({ boards }),
+      setBoards: (boards) =>
+        set({
+          boards,
+          currentBoard: boards.find(
+            (board) => board.id === get().currentBoard?.id
+          ),
+        }),
       currentBoard: null,
       setCurrentBoard: (board) => set({ currentBoard: board }),
     }),

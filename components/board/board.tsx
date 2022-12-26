@@ -1,4 +1,6 @@
+import Modal from "@components/modal";
 import { useDataStore } from "@store/data";
+import { useModalStore } from "@store/modal";
 import { demoData } from "@utils/demo-data";
 import { useEffect } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -6,6 +8,7 @@ import BoardColumn from "./column";
 
 const Board = () => {
   const { boards, setBoards, currentBoard, setCurrentBoard } = useDataStore();
+  const { modal, setModal } = useModalStore();
 
   useEffect(() => {
     // Set default boardTab on load
@@ -111,14 +114,6 @@ const Board = () => {
       );
       return;
     }
-
-    // dispatch(
-    //   dragEndTask({
-    //     currentBoardIndex: selectedBoardIndex,
-    //     destination,
-    //     source,
-    //   })
-    // );
   };
 
   return (
@@ -139,6 +134,7 @@ const Board = () => {
           <></>
         )}
       </div>
+      <Modal board={currentBoard}></Modal>
     </DragDropContext>
   );
 };

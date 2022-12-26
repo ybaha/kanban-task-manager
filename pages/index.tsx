@@ -4,6 +4,7 @@ import Board from "@components/board/board";
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import Modal from "@components/modal";
 
 const Index = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -42,17 +43,10 @@ const Index = () => {
         >
           {<Board></Board>}
         </main>
+        <div id="modal-root"></div>
       </div>
     </div>
   );
 };
-
-// const A = () => {
-//   return <div>Ag</div>;
-// };
-
-// const B = () => {
-//   return <div className="w-4 h-4">Bg</div>;
-// };
 
 export default Index;
