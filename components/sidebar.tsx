@@ -10,7 +10,11 @@ type SidebarProps = {
 const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
   const { boards, currentBoard, setCurrentBoard } = useDataStore();
   return (
-    <div className="flex desktop">
+    <div
+      className={`flex desktop ${
+        showSidebar ? "border-r border-gray-500" : ""
+      }`}
+    >
       <div
         className={`bg-gray-600 z-20 dark:bg-dark-gray h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)] lg:h-[calc(100vh-96px)] w-[280px] py-8 flex flex-col justify-between transition duration-300 ${
           showSidebar ? "" : "-translate-x-full"

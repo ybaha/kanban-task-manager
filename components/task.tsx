@@ -24,13 +24,13 @@ const Task = ({ title, index, subtasks, id, description }: TaskProps) => {
             setModal("task-view");
             setModalTaskData({ description, id, subtasks, title });
           }}
-          className="rounded-lg bg-sky-900 p-3 cursor-pointer"
+          className="rounded-lg bg-sky-900 px-4 py-5 cursor-pointer"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
           <h5 className="font-semibold">{title}</h5>
-          <p className="text-sm text-gray-400">
+          <p className="text-xs font-semibold text-gray-400 mt-1">
             {subtasksCompleted + " of " + subtasksLength + " subtasks"}
           </p>
         </div>

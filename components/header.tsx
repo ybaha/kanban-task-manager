@@ -2,6 +2,7 @@ import React from "react";
 import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
 import Nav from "./nav";
+import Image from "next/image";
 
 type HeaderProps = {
   showSidebar: boolean;
@@ -14,13 +15,22 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
   const addNewTask = () => {};
 
   return (
-    <header className="flex bg-gray-600 dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
+    <header className="flex justify-start bg-gray-600 dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
       <div
-        className={`desktop transition-all duration-300 h-full ${
-          showSidebar ? "pl-[280px]" : "pl-0"
+        className={`desktop transition-all duration-300 h-full flex ${
+          showSidebar ? "w-[280px] min-w-[280px]" : "w-0"
         }`}
-      ></div>
-      <div className="flex px-4 justify-between w-full items-center">
+      >
+        <Image
+          src="/assets/logo-light.svg"
+          width={150}
+          height={100}
+          alt=""
+          style={{ objectFit: "contain" }}
+          className="ml-4 cursor-pointer"
+        />
+      </div>
+      <div className="flex px-4 border-b border-l border-gray-500 justify-between w-full items-center">
         <h1>{currentBoard?.title || ""}</h1>
         <span onClick={() => setShowSidebar(!showSidebar)}> ~ </span>
         {showSidebar && (
