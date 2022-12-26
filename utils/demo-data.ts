@@ -3,7 +3,7 @@ import { Board } from "@customTypes/data";
 export const demoData: { boards: Board[] } = {
   boards: [
     {
-      id: 1,
+      id: 0,
       title: "Board 1",
       columns: [
         {
@@ -27,7 +27,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
             {
               id: 2,
@@ -45,7 +44,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
           ],
         },
@@ -70,7 +68,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
             {
               id: 4,
@@ -88,7 +85,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
           ],
         },
@@ -113,7 +109,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
             {
               id: 6,
@@ -131,7 +126,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
           ],
         },
@@ -162,7 +156,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
             {
               id: 2,
@@ -180,7 +173,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
           ],
         },
@@ -205,7 +197,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
             {
               id: 4,
@@ -223,7 +214,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
           ],
         },
@@ -248,7 +238,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
             {
               id: 6,
@@ -266,7 +255,6 @@ export const demoData: { boards: Board[] } = {
                   iscompleted: false,
                 },
               ],
-              status: "todo",
             },
           ],
         },

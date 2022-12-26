@@ -10,7 +10,7 @@ type BoardColumnProps = {
   id?: number;
 };
 
-const BoardColumn = ({ tasks, title }: BoardColumnProps) => {
+const BoardColumn = ({ tasks, title, id }: BoardColumnProps) => {
   return (
     <div className="h-full min-h-[200px] min-w-[280px] w-[280px] overflow-x-visible">
       {title && (
@@ -21,7 +21,7 @@ const BoardColumn = ({ tasks, title }: BoardColumnProps) => {
           </span>
         </div>
       )}
-      <Droppable droppableId={title || "empty"}>
+      <Droppable droppableId={id?.toString() || "empty"}>
         {(provided) => (
           <ul
             className="flex flex-col gap-4 min-h-[300px]"

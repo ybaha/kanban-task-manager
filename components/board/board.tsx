@@ -48,11 +48,12 @@ const Board = () => {
     ) {
       return;
     }
+
     const start = boards[selectedBoardIndex].columns.find(
-      (column) => column.title === source.droppableId
+      (column) => column.id.toString() === source.droppableId
     );
     const finish = boards[selectedBoardIndex].columns.find(
-      (column) => column.title === destination.droppableId
+      (column) => column.id.toString() === destination.droppableId
     );
 
     if (start === finish && start) {

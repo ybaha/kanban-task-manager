@@ -1,3 +1,4 @@
+import { useDataStore } from "@store/data";
 import React, { useState } from "react";
 
 type SidebarProps = {
@@ -6,6 +7,7 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
+  const { boards, currentBoard, setCurrentBoard } = useDataStore();
   return (
     <div className="flex ">
       <div
@@ -14,6 +16,22 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
         }`}
       >
         <button onClick={() => setShowSidebar(!showSidebar)}>close</button>
+        <div className="w-full h-full flex items-center flex-col">
+          {boards.map((board) => (
+            <div
+              key={board.id}
+              className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer ${
+                currentBoard?.id === board.id ? "bg-gray-700" : ""
+              }`}
+              onClick={() => setCurrentBoard(board)}
+            >
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full bg-gray-400 mr-2"></div>
+                <div>{board.title}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="desktop desktop z-10 w-8 h-full fixed  flex justify-center items-center">
         <div onClick={() => setShowSidebar(!showSidebar)}> expand</div>

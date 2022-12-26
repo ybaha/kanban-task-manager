@@ -3,13 +3,11 @@ import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
 import React, { useState } from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
 
 type Props = {} & Board;
 
 const TaskCreateModal = (board: Props) => {
-  const { boards, setBoards, currentBoard } = useDataStore();
+  const { boards, setBoards, currentBoard, setCurrentBoard } = useDataStore();
   const { setModal } = useModalStore();
   const { modalTaskData } = useModalStore();
   const completedSubtasks = modalTaskData?.subtasks.filter(
@@ -74,17 +72,17 @@ const TaskCreateModal = (board: Props) => {
     });
 
     setBoards(newBoards);
+    setCurrentBoard(newBoards.find((b) => b.id === currentBoard?.id)!);
   };
 
-  const handleCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    subtask: SubTask
-  ) => {
-    const newSubtasks = modalTaskData?.subtasks.map((subtask) => {
-      if (subtask.id === subtask.id) {
-        return { ...subtask, iscompleted: e.target.checked };
+  const handleCheckboxChange = (checked: boolean, subtask: SubTask) => {
+    console.log({ checked, subtask });
+
+    const newSubtasks = modalTaskData?.subtasks.map((st) => {
+      if (st.id === subtask.id) {
+        return { ...st, iscompleted: checked };
       }
-      return subtask;
+      return st;
     });
 
     const newBoards = boards.map((board) => {
@@ -110,7 +108,7 @@ const TaskCreateModal = (board: Props) => {
       return board;
     });
 
-    setBoards(newBoards);
+    setBoards(newBoards as Board[]);
   };
 
   return (
@@ -135,11 +133,24 @@ const TaskCreateModal = (board: Props) => {
                     className="text-sm font-medium bg-gray-700 p-2 rounded-lg outline-none focus:outline-none text-gray-900 dark:text-gray-300 flex items-center flex-1 w-full"
                   >
                     <input
+                      autoFocus={idx === 0}
                       id={`cb-${idx}`}
                       type="checkbox"
                       defaultChecked={subtask.iscompleted}
-                      onChange={(e) => handleCheckboxChange(e, subtask)}
+                      onChange={(e) =>
+                        handleCheckboxChange(e.currentTarget.checked, subtask)
+                      }
                       className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      // change state when enter hit
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleCheckboxChange(
+                            !e.currentTarget.checked,
+                            subtask
+                          );
+                          e.currentTarget.checked = !e.currentTarget.checked;
+                        }
+                      }}
                     />
                     <span className="ml-4">{subtask.title}</span>
                   </label>

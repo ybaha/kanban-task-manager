@@ -10,14 +10,18 @@ const Header = () => {
   return (
     <header className="flex justify-between items-center px-4 bg-gray-600 dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
       <h1>{currentBoard?.title || ""}</h1>
-      <button
-        className=""
-        onClick={() => {
-          setModal("task-create");
-        }}
-      >
-        Add Task
-      </button>
+      <div>
+        {" "}
+        <button
+          className=""
+          onClick={() => {
+            setModal("task-create");
+          }}
+        >
+          Add Task
+        </button>
+        <button onClick={() => setModal("board")}>Edit Board</button>
+      </div>
     </header>
   );
 };
