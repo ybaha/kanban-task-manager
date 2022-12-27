@@ -15,7 +15,7 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
   const addNewTask = () => {};
 
   return (
-    <header className="flex justify-start bg-gray-600 dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
+    <header className="flex justify-start bg-[#2B2C37] dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
       <div
         className={`desktop transition-all duration-300 h-full flex ${
           showSidebar ? "w-[280px] min-w-[280px]" : "w-0"
@@ -30,11 +30,11 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
           className="ml-4 cursor-pointer"
         />
       </div>
-      <div className="flex px-4 border-b border-l border-gray-500 justify-between w-full items-center">
+      <div className="flex px-4 border-b border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
         <h1>{currentBoard?.title || ""}</h1>
         <span onClick={() => setShowSidebar(!showSidebar)}> ~ </span>
         {showSidebar && (
-          <div className="mobile absolute top-36 sm:top-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-gray-600 p-6 rounded-lg">
+          <div className="mobile absolute top-36 sm:top-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-[#2B2C37] p-6 rounded-lg">
             <Nav />
           </div>
         )}

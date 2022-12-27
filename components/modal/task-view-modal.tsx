@@ -160,7 +160,7 @@ const TaskCreateModal = (board: Props) => {
           </div>
           <h5 className="text-sm mt-4">Current status</h5>
           <select
-            className="bg-gray-600 border border-gray-700 p-2 text-sm rounded-lg text-white"
+            className="bg-[#2B2C37] border border-gray-700 p-2 text-sm rounded-lg text-white"
             onChange={handleColumnChange}
           >
             {board.columns.map((column) => (

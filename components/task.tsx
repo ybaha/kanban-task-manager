@@ -24,7 +24,7 @@ const Task = ({ title, index, subtasks, id, description }: TaskProps) => {
             setModal("task-view");
             setModalTaskData({ description, id, subtasks, title });
           }}
-          className="rounded-lg bg-sky-900 px-4 py-5 cursor-pointer"
+          className="rounded-lg bg-[#2B2C37] px-4 py-5 cursor-pointer shadow-md shadow-[#40415823] hover:shadow-[#40415836]"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}

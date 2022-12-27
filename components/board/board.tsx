@@ -42,6 +42,11 @@ const Board = () => {
       return;
     }
 
+    if (destination.droppableId === "-1") {
+      setModal("board");
+      return;
+    }
+
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -129,11 +134,7 @@ const Board = () => {
             id={column.id}
           />
         ))}
-        {boards[selectedBoardIndex]?.columns.length > 0 ? (
-          <BoardColumn title="" />
-        ) : (
-          <></>
-        )}
+        <BoardColumn title="" newColumn />
       </div>
       <Modal board={currentBoard}></Modal>
     </DragDropContext>

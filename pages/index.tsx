@@ -44,7 +44,7 @@ const Index = () => {
           ></div>
         )}
         <main
-          className={`transition overflow-scroll duration-300 p-6 h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)] lg:h-[calc(100vh-96px)] ${
+          className={`transition bg-[#20212C] overflow-scroll duration-300 p-6 h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)] lg:h-[calc(100vh-96px)] ${
             !showSidebar && !isMobile ? "-translate-x-[280px]" : "w-full"
           }`}
           style={{

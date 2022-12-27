@@ -71,7 +71,7 @@ const BoardModal = () => {
             type="text"
             name="board-title"
             id="board-title"
-            className="bg-gray-600 rounded-lg border border-gray-700 p-2 text-sm"
+            className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm"
             defaultValue={currentBoard?.title}
             onChange={(e) => {
               setTempBoards(
@@ -97,7 +97,7 @@ const BoardModal = () => {
                 type="text"
                 name="subtask-title"
                 id="subtask-title"
-                className="bg-gray-600 rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
+                className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
                 defaultValue={column.title}
                 onChange={(e) => {
                   const newColumns = [...currentTempBoard?.columns];

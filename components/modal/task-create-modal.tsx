@@ -95,7 +95,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
           type="text"
           name="task-title"
           id="task-title"
-          className="bg-gray-600 rounded-lg border border-gray-700 p-2 text-sm"
+          className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm"
           onChange={(e) => setTaskTitle(e.target.value)}
         />
       </div>
@@ -106,7 +106,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
         <textarea
           name="description"
           id="description"
-          className="bg-gray-600 rounded-lg border border-gray-700 p-2 text-sm resize-none h-20"
+          className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm resize-none h-20"
           placeholder="e.g Study for exam tomorrow"
           onChange={(e) => setTaskDescription(e.target.value)}
         />
@@ -122,7 +122,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
                 type="text"
                 name="subtask-title"
                 id="subtask-title"
-                className="bg-gray-600 rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
+                className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
                 defaultValue={subtask.title}
                 onChange={(e) => {
                   const newSubtasks = [...subtasks];
@@ -138,7 +138,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
               type="text"
               name="subtask-title"
               id="subtask-title"
-              className="bg-gray-600 rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
+              className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
               placeholder="e.g Set a timer"
               onChange={(e) => setSubtaskInput(e.target.value)}
             />
@@ -158,7 +158,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
             Status
           </label>
           <select
-            className="bg-gray-600 border border-gray-700 p-2 text-sm rounded-lg text-white"
+            className="bg-[#2B2C37] border border-gray-700 p-2 text-sm rounded-lg text-white"
             name="column-title"
             onChange={(e) => {
               setTaskColumn(
