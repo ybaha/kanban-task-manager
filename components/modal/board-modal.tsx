@@ -19,6 +19,7 @@ const BoardModal = () => {
 
   const isCreateBoard = modalData?.modalTitle === "Create Board";
   const boardId = modalData?.boardId;
+
   const highestBoardId = boards.length
     ? Math.max(...boards.map((board) => board.id))
     : 0;
@@ -27,7 +28,9 @@ const BoardModal = () => {
   const [currentTempBoard, setCurrentTempBoard] = useState<Board | undefined>(
     isCreateBoard
       ? { columns: [], id: highestBoardId + 1 || 0, title: "New Boardd" }
-      : boards.find((board) => board.id === modalData?.boardId)
+      : boards.find((board) => board.id === modalData?.boardId) ||
+          currentBoard ||
+          undefined
   );
 
   console.log({ boardId, highestBoardId, tempBoards, currentTempBoard });
@@ -36,6 +39,8 @@ const BoardModal = () => {
   const colorPickerRef = useRef(null);
 
   useOnClickOutside(colorPickerRef, () => setShowColorPicker(-1));
+
+  useEffect(() => {}, [currentTempBoard]);
 
   const removeColumn = (columnId: number) => {
     if (isCreateBoard) {
@@ -48,7 +53,7 @@ const BoardModal = () => {
     }
     // if editing board
     else {
-      const newBoards = boards.map((board) => {
+      const newBoards = tempBoards.map((board) => {
         if (board.id === currentBoard?.id) {
           return {
             ...board,
@@ -57,6 +62,10 @@ const BoardModal = () => {
         }
         return board;
       });
+
+      setCurrentTempBoard(
+        newBoards.find((board) => board.id === currentTempBoard?.id)
+      );
       setTempBoards(newBoards);
     }
   };
@@ -84,13 +93,15 @@ const BoardModal = () => {
     }
     // if editing board
     else {
-      const newBoards = boards.map((board) => {
+      const newBoards = tempBoards.map((board) => {
         if (board.id === currentBoard?.id) {
           const highestColumnId =
             board.columns.reduce(
               (acc, column) => Math.max(acc, column.id),
               0
             ) || 0;
+          console.log({ highestColumnId });
+
           return {
             ...board,
             columns: [
@@ -107,6 +118,9 @@ const BoardModal = () => {
         return board;
       });
       setTempBoards(newBoards);
+      setCurrentTempBoard(
+        newBoards.find((board) => board.id === currentBoard?.id)!
+      );
     }
   };
 

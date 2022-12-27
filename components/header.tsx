@@ -35,24 +35,48 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
           className="ml-4 cursor-pointer"
         />
       </div>
-      <div className="flex px-4 border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
-        <h1 className="font-semibold text-xl ml-4">
-          {currentBoard?.title || ""}
-        </h1>
-        <span onClick={() => setShowSidebar(!showSidebar)}> ~ </span>
+      <div className="flex relative px-4 border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
+        <div className="flex items-center">
+          <h1 className="font-semibold text-xl ml-4">
+            {currentBoard?.title || ""}
+          </h1>
+          <span onClick={() => setShowSidebar(!showSidebar)} className="">
+            <Image
+              src="/assets/icon-chevron-down.svg"
+              width={12}
+              height={12}
+              alt=""
+              className={`ml-2 cursor-pointer transition-all duration-300 ${
+                showSidebar ? "rotate-180" : ""
+              }`}
+            ></Image>
+          </span>
+        </div>
         {showSidebar && (
-          <div className="mobile absolute top-36 sm:top-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-[#2B2C37] p-6 rounded-lg">
+          <div className="mobile absolute min-w-[280px] top-[260px] sm:top-[300px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-[#2B2C37] pt-8 pb-4 rounded-lg">
             <Nav />
           </div>
         )}
         <div className="flex items-center">
           <button
-            className="px-5 py-1.5 sm:py-3 text-sm rounded-full bg-[#575FC6] font-semibold"
+            className="px-4 sm:px-5 sm:py-3 text-sm rounded-full bg-[#575FC6] font-semibold flex items-center justify-center"
             onClick={() => {
-              setModal("task-create");
+              if (currentBoard?.columns?.length) setModal("task-create");
+              else {
+                setModal("board");
+                setModalData({
+                  // boardId: currentBoard?.id,
+                  modalTitle: "Edit Board",
+                });
+              }
             }}
           >
-            + Add New Task
+            <label className="desktop cursor-pointer">
+              {currentBoard?.columns.length
+                ? "+ Add New Task"
+                : "+ Add New Column"}
+            </label>
+            <label className="mobile font-bold text-lg cursor-pointer">+</label>
           </button>
           <div
             className="flex w-8 h-full justify-center items-center cursor-pointer ml-3 -mr-3"

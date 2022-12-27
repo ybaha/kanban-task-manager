@@ -21,25 +21,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
         }`}
       >
         <Nav />
-        <div className="flex justify-center items-center py-3 flex-1 mx-4 gap-2 bg-[#22232E] rounded-lg">
-          <Image
-            src="/assets/icon-light-theme.svg"
-            alt=""
-            width={18}
-            height={18}
-            className="object-contain"
-          ></Image>
-          <Switch
-            onChange={() => setTheme(theme === "light" ? "dark" : "light")}
-          ></Switch>
-          <Image
-            src="/assets/icon-dark-theme.svg"
-            alt=""
-            width={16}
-            height={16}
-            className="object-contain"
-          ></Image>
-        </div>
+
         <div
           className="flex items-center group hover:bg-white font-semibold px-2 py-3 pl-6 w-full rounded-r-full cursor-pointer"
           onClick={() => setShowSidebar(!showSidebar)}
