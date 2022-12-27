@@ -8,13 +8,17 @@ type Props = {} & Board;
 
 const TaskCreateModal = (board: Props) => {
   const { boards, setBoards, currentBoard, setCurrentBoard } = useDataStore();
-  const { setModal } = useModalStore();
-  const { modalTaskData } = useModalStore();
-  const taskId = modalTaskData!.id;
+  const { setModal, modalData } = useModalStore();
 
-  const completedSubtasks = modalTaskData?.subtasks.filter(
+  const currentColumn = boards.find((b) => b.id === board.id);
+
+  const currentTask = currentColumn?.columns
+    .find((column) => column.id === modalData?.columnId)
+    ?.tasks.find((task) => task.id === modalData?.taskId);
+
+  const completedSubtasks = currentTask?.subtasks.filter(
     (subtask) => subtask.iscompleted
-  ).length;
+  );
 
   const handleTaskRemove = () => {
     const newBoards = boards.map((board) => {
@@ -24,9 +28,7 @@ const TaskCreateModal = (board: Props) => {
           columns: board.columns.map((column) => {
             return {
               ...column,
-              tasks: column.tasks.filter(
-                (task) => task.id !== modalTaskData?.id
-              ),
+              tasks: column.tasks.filter((task) => task.id !== currentTask?.id),
             };
           }),
         };
@@ -39,7 +41,7 @@ const TaskCreateModal = (board: Props) => {
 
   const handleColumnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const sourceColumn = currentBoard?.columns.find((column) =>
-      column.tasks.some((task) => task.id === modalTaskData?.id)
+      column.tasks.some((task) => task.id === currentTask?.id)
     );
     const destinationColumn = currentBoard?.columns.find(
       (column) =>
@@ -56,14 +58,14 @@ const TaskCreateModal = (board: Props) => {
               return {
                 ...column,
                 tasks: column.tasks.filter(
-                  (task) => task.id !== modalTaskData?.id
+                  (task) => task.id !== currentTask?.id
                 ),
               };
             }
             if (column.id === destinationColumn?.id) {
               return {
                 ...column,
-                tasks: [...column.tasks, modalTaskData!],
+                tasks: [...column.tasks, currentTask!],
               };
             }
             return column;
@@ -80,7 +82,7 @@ const TaskCreateModal = (board: Props) => {
   const handleCheckboxChange = (checked: boolean, subtask: SubTask) => {
     console.log({ checked, subtask });
 
-    const newSubtasks = modalTaskData?.subtasks.map((st) => {
+    const newSubtasks = currentTask?.subtasks.map((st) => {
       if (st.id === subtask.id) {
         return { ...st, iscompleted: checked };
       }
@@ -94,11 +96,11 @@ const TaskCreateModal = (board: Props) => {
         return {
           ...board,
           columns: board.columns.map((column) => {
-            if (column.tasks.some((task) => task.id === modalTaskData?.id)) {
+            if (column.tasks.some((task) => task.id === currentTask?.id)) {
               return {
                 ...column,
                 tasks: column.tasks.map((task) => {
-                  if (task.id === modalTaskData?.id) {
+                  if (task.id === currentTask?.id) {
                     return { ...task, subtasks: newSubtasks };
                   }
                   return task;
@@ -118,18 +120,18 @@ const TaskCreateModal = (board: Props) => {
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <div className="w-full flex justify-between">
-        <h4 className="font-semibold text-lg">{modalTaskData?.title}</h4>
+        <h4 className="font-semibold text-lg">{currentTask?.title}</h4>
         <div onClick={() => handleTaskRemove()}>remove</div>
       </div>
 
-      <p className="mt-4 text-sm text-gray-400">{modalTaskData?.description}</p>
-      {modalTaskData?.subtasks && (
+      <p className="mt-4 text-sm text-gray-400">{currentTask?.description}</p>
+      {currentTask?.subtasks && (
         <div className="flex flex-col gap-1 my-4">
           <label htmlFor="subtask-title" className="text-sm">
-            {`Subtasks (${completedSubtasks} of ${modalTaskData?.subtasks.length})`}
+            {`Subtasks (${completedSubtasks?.length} of ${currentTask?.subtasks.length})`}
           </label>
           <div className="flex flex-col max-h-[300px] overflow-y-scroll">
-            {modalTaskData?.subtasks.map((subtask, idx) => (
+            {currentTask?.subtasks.map((subtask, idx) => (
               <div key={idx} className="flex w-full mt-2">
                 <div className="flex items-center w-full">
                   <label
@@ -172,7 +174,7 @@ const TaskCreateModal = (board: Props) => {
                 key={column.id}
                 value={column.id}
                 selected={column.tasks.some(
-                  (task) => task.id === modalTaskData?.id
+                  (task) => task.id === currentTask?.id
                 )}
               >
                 {column.title}

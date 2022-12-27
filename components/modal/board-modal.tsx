@@ -3,76 +3,129 @@ import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
 import IconCross from "public/assets/icon-cross";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { TwitterPicker } from "react-color";
 
 const BoardModal = () => {
   const newInputRef = useRef<HTMLInputElement>(null);
-  const { setBoards, boards, currentBoard } = useDataStore();
-  const { setModal } = useModalStore();
-  const [tempBoards, setTempBoards] = useState<Board[] | null>(boards);
-  const [showColorPicker, setShowColorPicker] = useState(-1);
-  const colorPickerRef = useRef(null);
-  if (tempBoards) console.log(tempBoards[currentBoard?.id!]);
+  const { setBoards, boards, currentBoard, setCurrentBoard } = useDataStore();
+  const { setModal, modalData } = useModalStore();
 
-  useOnClickOutside(colorPickerRef, () => setShowColorPicker(-1));
-  const currentTempBoard = tempBoards?.find(
-    (board) => board.id === currentBoard?.id
-  )!;
+  const isCreateBoard = modalData?.modalTitle === "Create Board";
+  const boardId = modalData?.boardId;
+  const highestBoardId = boards.length
+    ? Math.max(...boards.map((board) => board.id))
+    : 0;
 
-  const highestColumnId = currentTempBoard?.columns.reduce(
-    (acc, column) => (column.id > acc ? column.id : acc),
-    0
+  const [tempBoards, setTempBoards] = useState<Board[]>(boards);
+  const [currentTempBoard, setCurrentTempBoard] = useState<Board | undefined>(
+    isCreateBoard
+      ? { columns: [], id: highestBoardId + 1 || 0, title: "New Boardd" }
+      : boards.find((board) => board.id === modalData?.boardId)
   );
 
-  const handleSave = () => {
-    if (tempBoards) setBoards(tempBoards);
-    setModal(undefined);
-  };
+  console.log({ boardId, highestBoardId, tempBoards, currentTempBoard });
 
-  const removeColumn = (id: number) => {
-    if (tempBoards)
-      setTempBoards(
-        tempBoards.map((board) => {
-          if (board.id === currentBoard?.id) {
-            return {
-              ...board,
-              columns: board.columns.filter((column) => column.id !== id),
-            };
-          }
-          return board;
-        })
-      );
+  const [showColorPicker, setShowColorPicker] = useState(-1);
+  const colorPickerRef = useRef(null);
+
+  useOnClickOutside(colorPickerRef, () => setShowColorPicker(-1));
+
+  const removeColumn = (columnId: number) => {
+    if (isCreateBoard) {
+      setCurrentTempBoard({
+        ...currentTempBoard,
+        columns: currentTempBoard?.columns.filter(
+          (column) => column.id !== columnId
+        ),
+      } as Board);
+    }
+    // if editing board
+    else {
+      const newBoards = boards.map((board) => {
+        if (board.id === currentBoard?.id) {
+          return {
+            ...board,
+            columns: board.columns.filter((column) => column.id !== columnId),
+          };
+        }
+        return board;
+      });
+      setTempBoards(newBoards);
+    }
   };
 
   const addColumn = () => {
-    if (tempBoards)
-      setTempBoards(
-        tempBoards.map((board) => {
-          if (board.id === currentBoard?.id) {
-            return {
-              ...board,
-              columns: [
-                ...board.columns,
-                {
-                  id: highestColumnId + 1,
-                  title: "New Column",
-                  tasks: [],
-                  color: "#575FC6",
-                },
-              ],
-            };
-          }
-          return board;
-        })
-      );
+    if (isCreateBoard) {
+      const highestColumnId =
+        currentTempBoard?.columns.reduce(
+          (acc, column) => Math.max(acc, column.id),
+          0
+        ) || 0;
+
+      setCurrentTempBoard({
+        ...currentTempBoard,
+        columns: [
+          ...(currentTempBoard?.columns || []),
+          {
+            id: highestColumnId + 1,
+            title: "New Column",
+            tasks: [],
+            color: "#5543ca",
+          },
+        ],
+      } as Board);
+    }
+    // if editing board
+    else {
+      const newBoards = boards.map((board) => {
+        if (board.id === currentBoard?.id) {
+          const highestColumnId =
+            board.columns.reduce(
+              (acc, column) => Math.max(acc, column.id),
+              0
+            ) || 0;
+          return {
+            ...board,
+            columns: [
+              ...board.columns,
+              {
+                id: highestColumnId + 1,
+                title: "New Column",
+                tasks: [],
+                color: "#5543ca",
+              },
+            ],
+          };
+        }
+        return board;
+      });
+      setTempBoards(newBoards);
+    }
+  };
+
+  const handleSave = () => {
+    if (isCreateBoard && currentTempBoard) {
+      setBoards([...boards, currentTempBoard]);
+    } else {
+      setBoards(tempBoards);
+    }
+    setModal(undefined);
   };
 
   return (
     <div>
       <div className="flex flex-col">
         <div className="flex flex-col gap-1 my-4">
-          <h2 className="text-lg font-semibold mb-6">Edit Board</h2>
+          <h2 className="text-lg font-semibold mb-6">
+            {isCreateBoard ? "Create Board" : "Edit Board"}
+          </h2>
           <label htmlFor="board-title" className="text-sm">
             Board name
           </label>
@@ -81,10 +134,17 @@ const BoardModal = () => {
             name="board-title"
             id="board-title"
             className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm"
-            defaultValue={currentBoard?.title}
+            defaultValue={isCreateBoard ? "" : currentBoard?.title}
             onChange={(e) => {
-              setTempBoards(
-                boards.map((board) => {
+              if (isCreateBoard) {
+                console.log("aa");
+
+                setCurrentTempBoard({
+                  ...currentTempBoard,
+                  title: e.target.value,
+                } as Board);
+              } else {
+                const newBoards = boards.map((board) => {
                   if (board.id === currentBoard?.id) {
                     return {
                       ...board,
@@ -92,8 +152,9 @@ const BoardModal = () => {
                     };
                   }
                   return board;
-                })
-              );
+                });
+                setTempBoards(newBoards);
+              }
             }}
           />
         </div>
@@ -109,10 +170,12 @@ const BoardModal = () => {
                 className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
                 defaultValue={column.title}
                 onChange={(e) => {
+                  console.log(currentTempBoard?.columns);
+
                   const newColumns = [...currentTempBoard?.columns];
                   newColumns[idx].title = e.target.value;
                   setTempBoards(
-                    boards.map((board) => {
+                    tempBoards.map((board) => {
                       if (board.id === currentBoard?.id) {
                         return {
                           ...board,
@@ -141,19 +204,36 @@ const BoardModal = () => {
                     <TwitterPicker
                       triangle="top-right"
                       onChange={(color) =>
-                        setTempBoards(
-                          boards.map((board) => {
-                            if (board.id === currentBoard?.id) {
-                              const newColumns = [...currentTempBoard?.columns];
-                              newColumns[idx].color = color.hex;
-                              return {
-                                ...board,
-                                columns: newColumns,
-                              };
-                            }
-                            return board;
-                          })
-                        )
+                        isCreateBoard
+                          ? setCurrentTempBoard({
+                              ...currentTempBoard,
+                              columns: currentTempBoard?.columns.map(
+                                (column, idx) => {
+                                  if (idx === showColorPicker) {
+                                    return {
+                                      ...column,
+                                      color: color.hex,
+                                    };
+                                  }
+                                  return column;
+                                }
+                              ),
+                            } as Board)
+                          : setTempBoards(
+                              tempBoards.map((board) => {
+                                if (board.id === currentBoard?.id) {
+                                  const newColumns = [
+                                    ...currentTempBoard?.columns,
+                                  ];
+                                  newColumns[idx].color = color.hex;
+                                  return {
+                                    ...board,
+                                    columns: newColumns,
+                                  };
+                                }
+                                return board;
+                              })
+                            )
                       }
                       styles={{
                         default: {

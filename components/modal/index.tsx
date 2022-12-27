@@ -6,6 +6,7 @@ import TaskViewModal from "./task-view-modal";
 import ReactDOM from "react-dom";
 import { Board, Task } from "@customTypes/data";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
+import ConfirmationModal from "./confirmation";
 
 type ModalProps = {
   board: Board | null;
@@ -36,12 +37,13 @@ const Modal = ({ board }: ModalProps) => {
           }}
         >
           <div
-            className="w-[480px] min-h-[360px] bg-[#2B2C37] rounded-lg p-6 mx-2 sm:p-8"
+            className="w-[480px] min-h-[250px] bg-[#2B2C37] rounded-lg p-6 mx-2 sm:p-8"
             ref={ref}
           >
             {modal === "task-create" && <TaskCreateModal {...board} />}
             {modal === "task-view" && <TaskViewModal {...board} />}
             {modal === "board" && <BoardModal {...board} />}
+            {modal === "confirmation" && <ConfirmationModal {...board} />}
           </div>
         </div>,
         document.getElementById("modal-root") as HTMLElement

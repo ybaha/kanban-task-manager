@@ -6,7 +6,7 @@ import React from "react";
 
 const Nav = () => {
   const { boards, currentBoard, setCurrentBoard } = useDataStore();
-  const { setModal } = useModalStore();
+  const { setModal, setModalData } = useModalStore();
   return (
     <div className="w-full h-full flex items-center flex-col pr-8">
       <h3 className="w-full uppercase text-gray-400 px-6 mb-4 text-[13px] font-semibold tracking-widest">
@@ -42,7 +42,10 @@ const Nav = () => {
       >
         <div
           className="flex items-center w-full group"
-          onClick={() => setModal("board")}
+          onClick={() => {
+            setModal("board");
+            setModalData({ modalTitle: "Create Board" });
+          }}
         >
           <div className="flex items-center hover:bg-white font-semibold px-2 py-3 pl-6 w-full rounded-r-full">
             <IconBoard className="fill-[#575FC6] group-hover:fill-[#575FC6]" />

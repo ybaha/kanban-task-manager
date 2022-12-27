@@ -20,19 +20,25 @@ const BoardColumn = ({
   newColumn,
   color,
 }: BoardColumnProps) => {
-  const { setModal } = useModalStore();
+  const { setModal, setModalData } = useModalStore();
   if (newColumn)
     return (
       <Droppable droppableId="-1">
         {(provided) => (
           <div
-            onClick={() => setModal("board")}
-            className="h-full min-h-[500px] min-w-[280px] w-[280px] mt-9 overflow-x-visible bg-[#22232E] flex justify-center items-center cursor-pointer rounded-lg"
+            onClick={() => {
+              setModal("board");
+              setModalData({ modalTitle: "Create Board" });
+            }}
+            className="h-full min-h-[500px] mt-9 overflow-x-visible bg-[#22232E] flex justify-center items-center cursor-pointer rounded-lg"
             ref={provided.innerRef}
+            style={
+              title !== "Create New Board"
+                ? { width: "280px", minWidth: "280px" }
+                : { width: "100%" }
+            }
           >
-            <span className="text-gray-400 text-lg font-semibold">
-              + New Column
-            </span>
+            <span className="text-gray-400 text-lg font-semibold">{title}</span>
           </div>
         )}
       </Droppable>

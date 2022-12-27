@@ -5,17 +5,10 @@ import { useModalStore } from "@store/modal";
 import Modal from "./modal";
 import { useDataStore } from "@store/data";
 
-type TaskProps = { index: number; columnId: string } & TaskType;
+type TaskProps = { index: number; columnId?: number } & TaskType;
 
-const Task = ({
-  title,
-  index,
-  subtasks,
-  id,
-  description,
-  columnId,
-}: TaskProps) => {
-  const { setModal, setModalTaskData } = useModalStore();
+const Task = ({ title, index, subtasks, id, columnId }: TaskProps) => {
+  const { setModal, setModalData } = useModalStore();
   const { currentBoard } = useDataStore();
 
   const subtasksLength = subtasks?.length;
@@ -29,12 +22,9 @@ const Task = ({
         <div
           onClick={() => {
             setModal("task-view");
-            setModalTaskData({
-              description,
-              id,
-              subtasks,
-              title,
-              columnId,
+            setModalData({
+              columnId: columnId,
+              taskId: id,
             });
           }}
           className="group rounded-lg bg-[#2B2C37] px-4 py-5 min-h-[92px] cursor-pointer shadow-md shadow-[#40415823] hover:shadow-[#40415836] flex flex-col justify-center"

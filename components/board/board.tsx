@@ -11,24 +11,13 @@ const Board = () => {
   const { modal, setModal } = useModalStore();
 
   useEffect(() => {
-    // Set default boardTab on load
     if (boards.length > 0 && !currentBoard) {
       setCurrentBoard(boards[0]);
-    }
-    // fetch from local storage
-    else if (currentBoard) {
-      setCurrentBoard(currentBoard);
     } else {
-      setBoards(demoData.boards);
+      // setBoards(demoData.boards);
     }
   }, [boards, currentBoard]);
 
-  // if (boards.length === 0) {
-  //   return <div>Loading</div>;
-  // }
-  console.log(boards);
-
-  // Find the selected board index
   const selectedBoardIndex = boards.findIndex(
     (board) => board.title === currentBoard?.title
   );
@@ -135,7 +124,10 @@ const Board = () => {
             color={column.color}
           />
         ))}
-        <BoardColumn title="" newColumn />
+        <BoardColumn
+          title={boards.length > 0 ? "+ New Column" : "Create New Board"}
+          newColumn
+        />
       </div>
       <Modal board={currentBoard}></Modal>
     </DragDropContext>

@@ -13,7 +13,7 @@ type HeaderProps = {
 const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
   const moreRef = useRef<HTMLDivElement>(null);
   const { currentBoard } = useDataStore();
-  const { setModal } = useModalStore();
+  const { setModal, setModalData } = useModalStore();
   const addNewTask = () => {};
   const [showMore, setShowMore] = useState(false);
 
@@ -35,7 +35,7 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
           className="ml-4 cursor-pointer"
         />
       </div>
-      <div className="flex px-4 border-b border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
+      <div className="flex px-4 border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
         <h1 className="font-semibold text-xl ml-4">
           {currentBoard?.title || ""}
         </h1>
@@ -73,13 +73,27 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
                 className="text-sm hover:underline cursor-pointer text-gray-200"
                 onClick={() => {
                   setModal("board");
+                  setModalData({
+                    modalTitle: "Edit Board",
+                    boardId: currentBoard?.id,
+                  });
                   setShowMore(false);
                 }}
                 ref={moreRef}
               >
                 Edit Board
               </span>
-              <span className="text-sm hover:underline cursor-pointer text-red-400">
+              <span
+                className="text-sm hover:underline cursor-pointer text-red-400"
+                onClick={() => {
+                  setModalData({
+                    modalDescription: `Are you sure you want to delete "${currentBoard?.title}" board?. This action will remove all the columns and tasks associated with this board and cannot be undone.`,
+                    modalTitle: "Delete this board",
+                    boardId: currentBoard?.id,
+                  });
+                  setModal("confirmation");
+                }}
+              >
                 Delete Board
               </span>
             </div>
