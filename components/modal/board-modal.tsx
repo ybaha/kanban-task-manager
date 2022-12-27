@@ -1,14 +1,21 @@
 import { Board } from "@customTypes/data";
 import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
-import React, { useRef, useState } from "react";
+import { useOnClickOutside } from "@utils/useOnClickOutside";
+import IconCross from "public/assets/icon-cross";
+import React, { useEffect, useRef, useState } from "react";
+import { TwitterPicker } from "react-color";
 
 const BoardModal = () => {
   const newInputRef = useRef<HTMLInputElement>(null);
   const { setBoards, boards, currentBoard } = useDataStore();
   const { setModal } = useModalStore();
   const [tempBoards, setTempBoards] = useState<Board[] | null>(boards);
+  const [showColorPicker, setShowColorPicker] = useState(-1);
+  const colorPickerRef = useRef(null);
+  if (tempBoards) console.log(tempBoards[currentBoard?.id!]);
 
+  useOnClickOutside(colorPickerRef, () => setShowColorPicker(-1));
   const currentTempBoard = tempBoards?.find(
     (board) => board.id === currentBoard?.id
   )!;
@@ -24,39 +31,41 @@ const BoardModal = () => {
   };
 
   const removeColumn = (id: number) => {
-    setTempBoards(
-      boards.map((board) => {
-        if (board.id === currentBoard?.id) {
-          return {
-            ...board,
-            columns: board.columns.filter((column) => column.id !== id),
-          };
-        }
-        return board;
-      })
-    );
+    if (tempBoards)
+      setTempBoards(
+        tempBoards.map((board) => {
+          if (board.id === currentBoard?.id) {
+            return {
+              ...board,
+              columns: board.columns.filter((column) => column.id !== id),
+            };
+          }
+          return board;
+        })
+      );
   };
 
   const addColumn = () => {
-    setTempBoards(
-      boards.map((board) => {
-        if (board.id === currentBoard?.id) {
-          return {
-            ...board,
-            columns: [
-              ...board.columns,
-              {
-                id: highestColumnId + 1,
-                title: "New Column",
-                tasks: [],
-                color: "#5543ca",
-              },
-            ],
-          };
-        }
-        return board;
-      })
-    );
+    if (tempBoards)
+      setTempBoards(
+        tempBoards.map((board) => {
+          if (board.id === currentBoard?.id) {
+            return {
+              ...board,
+              columns: [
+                ...board.columns,
+                {
+                  id: highestColumnId + 1,
+                  title: "New Column",
+                  tasks: [],
+                  color: "#575FC6",
+                },
+              ],
+            };
+          }
+          return board;
+        })
+      );
   };
 
   return (
@@ -115,28 +124,84 @@ const BoardModal = () => {
                   );
                 }}
               />
-              <div onClick={() => removeColumn(column.id)}>close</div>
+              <div className="flex justify-center items-center ml-4 cursor-pointer relative">
+                <div
+                  className="w-4 h-4 rounded-full "
+                  style={{ backgroundColor: column.color }}
+                  ref={colorPickerRef as any}
+                  onClick={() =>
+                    setShowColorPicker(showColorPicker === -1 ? idx : -1)
+                  }
+                ></div>
+                {showColorPicker !== -1 && showColorPicker === idx && (
+                  <div
+                    className="absolute -right-[13px] top-8 z-30"
+                    ref={colorPickerRef as any}
+                  >
+                    <TwitterPicker
+                      triangle="top-right"
+                      onChange={(color) =>
+                        setTempBoards(
+                          boards.map((board) => {
+                            if (board.id === currentBoard?.id) {
+                              const newColumns = [...currentTempBoard?.columns];
+                              newColumns[idx].color = color.hex;
+                              return {
+                                ...board,
+                                columns: newColumns,
+                              };
+                            }
+                            return board;
+                          })
+                        )
+                      }
+                      styles={{
+                        default: {
+                          card: {
+                            backgroundColor: "#2B2C37",
+                            border: "1px solid #22232E",
+                            width: "280px",
+                          },
+                          triangle: {
+                            display: "none",
+                          },
+                          input: {
+                            height: "30px",
+                            backgroundColor: "#2B2C37",
+                          },
+                        },
+                      }}
+                    ></TwitterPicker>
+                  </div>
+                )}
+              </div>
+              <div
+                onClick={() => removeColumn(column.id)}
+                className="flex justify-center items-center ml-4 cursor-pointer"
+              >
+                <IconCross />
+              </div>
             </div>
           ))}
         </div>
         <button
-          className="bg-white rounded-full text-gray-800 py-2 text-sm font-semibold mt-4"
+          className="bg-white rounded-full text-[#575FC6] py-2 text-sm font-semibold mt-4"
           type="button"
           onClick={() => addColumn()}
         >
           + Add new column
         </button>
 
-        <div className="flex w-full gap-8 mt-8">
+        <div className="flex w-full gap-8 mt-6">
           <button
-            className="bg-white rounded-full text-gray-800 py-2 text-sm font-semibold mt-2 flex-1"
+            className="bg-[#575FC6] text-white rounded-full py-2 text-sm font-semibold mt-2 flex-1"
             type="button"
             onClick={() => handleSave()}
           >
-            Save
+            Save Changes
           </button>
           <button
-            className="bg-white rounded-full text-gray-800 py-2 text-sm font-semibold mt-2 flex-1"
+            className="bg-white rounded-full text-[#575FC6] py-2 text-sm font-semibold mt-2 flex-1"
             type="button"
             onClick={() => setModal(undefined)}
           >

@@ -24,7 +24,7 @@ const Index = () => {
         setShowSidebar={setShowSidebar}
       ></Header>
       <div
-        className="flex items-center"
+        className="flex items-center bg-[#22232E]"
         style={{
           width: showSidebar
             ? "100%"

@@ -1,6 +1,8 @@
 import { Board, Column, SubTask, Task } from "@customTypes/data";
 import { useDataStore } from "@store/data";
+import { useModalStore } from "@store/modal";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
+import IconCross from "public/assets/icon-cross";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
@@ -9,6 +11,7 @@ type Props = {} & Board;
 
 const TaskCreateModal = ({ id, title, columns }: Props) => {
   const { boards, setBoards } = useDataStore();
+  const { setModal } = useModalStore();
   const [subtaskInput, setSubtaskInput] = useState<string>("");
   const [subtasks, setSubtasks] = useState<SubTask[]>([]);
   const [taskTitle, setTaskTitle] = useState<string>("");
@@ -19,14 +22,12 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
 
   const addSubtask = () => {
     if (subtaskInput) {
-      console.log(subtaskInput);
-
       const id = subtasks.length;
+      setSubtaskInput("");
       setSubtasks([
         ...subtasks,
         { title: subtaskInput, id, iscompleted: false },
       ]);
-      setSubtaskInput("");
     }
   };
 
@@ -77,6 +78,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
     });
 
     setBoards(newBoards);
+    setModal("");
   };
 
   useEffect(() => {
@@ -85,7 +87,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h4 className="font-semibold">Add new Task</h4>
+      <h4 className="font-semibold text-lg">Add New Task</h4>
       <div className="flex flex-col gap-1 my-4">
         <label htmlFor="task-title" className="text-sm">
           Title
@@ -130,7 +132,12 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
                   setSubtasks(newSubtasks);
                 }}
               />
-              <div onClick={() => removeSubtask(subtask.id)}>close</div>
+              <div
+                onClick={() => removeSubtask(subtask.id)}
+                className="flex justify-center items-center ml-4 cursor-pointer"
+              >
+                <IconCross />
+              </div>
             </div>
           ))}
           <div className="flex w-full mt-2">
@@ -140,13 +147,14 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
               id="subtask-title"
               className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
               placeholder="e.g Set a timer"
+              value={subtaskInput}
               onChange={(e) => setSubtaskInput(e.target.value)}
             />
             {/* <div>close</div> */}
           </div>
         </div>
         <button
-          className="bg-white rounded-full text-gray-800 py-2 text-sm font-semibold mt-2"
+          className="bg-white text-[#575FC6] rounded-full py-2 text-sm font-semibold mt-2"
           type="button"
           onClick={() => addSubtask()}
         >
@@ -179,7 +187,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
         </div>
 
         <button
-          className="bg-white rounded-full text-gray-800 py-2 text-sm font-semibold mt-4"
+          className="bg-[#575FC6] text-white rounded-full py-2 text-sm font-semibold mt-4"
           type="submit"
         >
           Create Task

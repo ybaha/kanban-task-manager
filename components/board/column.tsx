@@ -10,9 +10,16 @@ type BoardColumnProps = {
   title?: string;
   id?: number;
   newColumn?: boolean;
+  color?: string;
 };
 
-const BoardColumn = ({ tasks, title, id, newColumn }: BoardColumnProps) => {
+const BoardColumn = ({
+  tasks,
+  title,
+  id,
+  newColumn,
+  color,
+}: BoardColumnProps) => {
   const { setModal } = useModalStore();
   if (newColumn)
     return (
@@ -34,7 +41,10 @@ const BoardColumn = ({ tasks, title, id, newColumn }: BoardColumnProps) => {
     <div className="h-full min-h-[200px] min-w-[280px] w-[280px] overflow-x-visible">
       {title && (
         <div className="flex items-center mb-4">
-          <div className="w-4 h-4 rounded-full bg-red-600"></div>
+          <div
+            className="w-4 h-4 rounded-full"
+            style={{ backgroundColor: color }}
+          ></div>
           <span className="text-sm tracking-widest uppercase ml-2">
             {title + " (" + tasks?.length + ")"}
           </span>

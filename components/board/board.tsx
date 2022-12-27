@@ -132,6 +132,7 @@ const Board = () => {
             title={column.title}
             key={column.id}
             id={column.id}
+            color={column.color}
           />
         ))}
         <BoardColumn title="" newColumn />

@@ -45,13 +45,14 @@ const Nav = () => {
           onClick={() => setModal("board")}
         >
           <div className="flex items-center hover:bg-white font-semibold px-2 py-3 pl-6 w-full rounded-r-full">
-            <IconBoard className="fill-gray-400 group-hover:fill-[#575FC6]" />
-            <span className="pl-4 text-gray-400 group-hover:text-[#575FC6]">
+            <IconBoard className="fill-[#575FC6] group-hover:fill-[#575FC6]" />
+            <span className="pl-4 text-[#575FC6] group-hover:text-[#575FC6]">
               + Create new Board
             </span>
           </div>
         </div>
       </div>
+      <div></div>
     </div>
   );
 };

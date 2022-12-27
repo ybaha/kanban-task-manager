@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
 import Nav from "./nav";
 import Image from "next/image";
+import { useOnClickOutside } from "@utils/useOnClickOutside";
 
 type HeaderProps = {
   showSidebar: boolean;
@@ -10,9 +11,13 @@ type HeaderProps = {
 };
 
 const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
+  const moreRef = useRef<HTMLDivElement>(null);
   const { currentBoard } = useDataStore();
   const { setModal } = useModalStore();
   const addNewTask = () => {};
+  const [showMore, setShowMore] = useState(false);
+
+  useOnClickOutside(moreRef, () => setShowMore(false));
 
   return (
     <header className="flex justify-start bg-[#2B2C37] dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
@@ -38,16 +43,45 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
             <Nav />
           </div>
         )}
-        <div>
+        <div className="flex items-center">
           <button
-            className=""
+            className="px-5 py-1.5 sm:py-3 text-sm rounded-full bg-[#575FC6] font-semibold"
             onClick={() => {
               setModal("task-create");
             }}
           >
-            Add Task
+            + Add New Task
           </button>
-          <button onClick={() => setModal("board")}>Edit Board</button>
+          <div
+            className="flex w-8 h-full justify-center items-center cursor-pointer ml-3 -mr-3"
+            onClick={() => setShowMore(!showMore)}
+          >
+            <Image
+              src="/assets/icon-vertical-ellipsis.svg"
+              width={5}
+              height={8}
+              alt="More options"
+              className="object-contain"
+            ></Image>
+          </div>
+
+          {showMore && (
+            <div className="absolute w-44 h-24 bg-[#22232E] shadow-lg shadow-[#00000026] rounded-lg top-14 sm:top-[72px] lg:top-[86px] flex flex-col px-6 justify-around">
+              <span
+                className="text-sm hover:underline cursor-pointer text-gray-200"
+                onClick={() => {
+                  setModal("board");
+                  setShowMore(false);
+                }}
+                ref={moreRef}
+              >
+                Edit Board
+              </span>
+              <span className="text-sm hover:underline cursor-pointer text-red-400">
+                Delete Board
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </header>
