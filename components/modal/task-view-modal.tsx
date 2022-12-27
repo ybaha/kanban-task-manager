@@ -2,7 +2,7 @@ import { Board, Column, SubTask, Task } from "@customTypes/data";
 import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 type Props = {} & Board;
 
@@ -10,6 +10,8 @@ const TaskCreateModal = (board: Props) => {
   const { boards, setBoards, currentBoard, setCurrentBoard } = useDataStore();
   const { setModal } = useModalStore();
   const { modalTaskData } = useModalStore();
+  const taskId = modalTaskData!.id;
+
   const completedSubtasks = modalTaskData?.subtasks.filter(
     (subtask) => subtask.iscompleted
   ).length;
@@ -72,7 +74,7 @@ const TaskCreateModal = (board: Props) => {
     });
 
     setBoards(newBoards);
-    setCurrentBoard(newBoards.find((b) => b.id === currentBoard?.id)!);
+    setCurrentBoard(newBoards.find((board) => board.id === currentBoard?.id)!);
   };
 
   const handleCheckboxChange = (checked: boolean, subtask: SubTask) => {
@@ -84,6 +86,8 @@ const TaskCreateModal = (board: Props) => {
       }
       return st;
     });
+
+    console.log({ newSubtasks });
 
     const newBoards = boards.map((board) => {
       if (board.id === currentBoard?.id) {
@@ -145,7 +149,7 @@ const TaskCreateModal = (board: Props) => {
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           handleCheckboxChange(
-                            !e.currentTarget.checked,
+                            e.currentTarget.checked,
                             subtask
                           );
                           e.currentTarget.checked = !e.currentTarget.checked;

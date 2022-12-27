@@ -6,8 +6,8 @@ type ModalTypes = "task-create" | "task-view" | "board" | undefined;
 type ModalStore = {
   modal: ModalTypes;
   setModal: (modal: ModalTypes) => void;
-  modalTaskData?: Task;
-  setModalTaskData: (task: Task) => void;
+  modalTaskData?: Task & { columnId: string };
+  setModalTaskData: (task: Task & { columnId: string }) => void;
 };
 
 export const useModalStore = zustand<ModalStore>((set) => ({

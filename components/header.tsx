@@ -36,7 +36,9 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
         />
       </div>
       <div className="flex px-4 border-b border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
-        <h1>{currentBoard?.title || ""}</h1>
+        <h1 className="font-semibold text-xl ml-4">
+          {currentBoard?.title || ""}
+        </h1>
         <span onClick={() => setShowSidebar(!showSidebar)}> ~ </span>
         {showSidebar && (
           <div className="mobile absolute top-36 sm:top-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-[#2B2C37] p-6 rounded-lg">

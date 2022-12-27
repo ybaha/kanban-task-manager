@@ -9,8 +9,8 @@ type BoardColumnProps = {
   tasks?: TaskType[];
   title?: string;
   id?: number;
-  newColumn?: boolean;
   color?: string;
+  newColumn?: boolean;
 };
 
 const BoardColumn = ({
@@ -45,7 +45,7 @@ const BoardColumn = ({
             className="w-4 h-4 rounded-full"
             style={{ backgroundColor: color }}
           ></div>
-          <span className="text-sm tracking-widest uppercase ml-2">
+          <span className="text-xs tracking-widest uppercase ml-2 text-gray-400 font-semibold">
             {title + " (" + tasks?.length + ")"}
           </span>
         </div>
@@ -59,7 +59,7 @@ const BoardColumn = ({
           >
             {tasks?.map((task, index) => (
               <li key={task.id}>
-                <Task {...task} index={index}></Task>
+                <Task {...task} index={index} columnId={id}></Task>
               </li>
             ))}
             {provided.placeholder}
