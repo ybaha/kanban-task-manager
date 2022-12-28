@@ -40,10 +40,12 @@ const Modal = ({ board }: ModalProps) => {
             className="w-[480px] min-h-[250px] bg-white dark:bg-[#2b2c37] rounded-lg p-6 mx-2 sm:p-8"
             ref={ref}
           >
-            {modal === "task-create" && <TaskCreateModal {...board} />}
-            {modal === "task-view" && <TaskViewModal {...board} />}
-            {modal === "board" && <BoardModal {...board} />}
-            {modal === "confirmation" && <ConfirmationModal {...board} />}
+            {modal === "task-create" && <TaskCreateModal {...(board as any)} />}
+            {modal === "task-view" && <TaskViewModal {...(board as any)} />}
+            {modal === "board" && <BoardModal {...(board as any)} />}
+            {modal === "confirmation" && (
+              <ConfirmationModal {...(board as any)} />
+            )}
           </div>
         </div>,
         document.getElementById("modal-root") as HTMLElement
