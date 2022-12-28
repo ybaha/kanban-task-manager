@@ -27,7 +27,7 @@ const BoardModal = () => {
   const [tempBoards, setTempBoards] = useState<Board[]>(boards);
   const [currentTempBoard, setCurrentTempBoard] = useState<Board | undefined>(
     isCreateBoard
-      ? { columns: [], id: highestBoardId + 1 || 0, title: "New Boardd" }
+      ? { columns: [], id: highestBoardId + 1 || 0, title: "New Board" }
       : boards.find((board) => board.id === modalData?.boardId) ||
           currentBoard ||
           undefined

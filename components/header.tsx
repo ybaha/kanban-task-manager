@@ -86,16 +86,16 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
               if (currentBoard?.columns?.length) setModal("task-create");
               else {
                 setModal("board");
-                setModalData({
-                  modalTitle: "Edit Board",
-                });
+                setModalData({ modalTitle: "Create Board" });
               }
             }}
           >
             <label className="desktop cursor-pointer">
               {currentBoard?.columns.length
                 ? "+ Add New Task"
-                : "+ Add New Column"}
+                : currentBoard
+                ? "+ Add New Column"
+                : "+ Create Board"}
             </label>
             <label className="mobile font-bold text-lg cursor-pointer">+</label>
           </button>
