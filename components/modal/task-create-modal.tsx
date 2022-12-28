@@ -28,7 +28,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
     currentTask?.description || ""
   );
   const [taskColumn, setTaskColumn] = useState<Column | undefined>(
-    columns.find((column) => column.id === modalData?.columnId) || undefined
+    columns.find((column) => column.id === modalData?.columnId) || columns[0]
   );
 
   console.log({ modalData, currentTask });
@@ -60,6 +60,9 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    console.log(taskTitle, taskColumn);
+    console.log(isCreateTask);
 
     if (!taskTitle || !taskColumn) return;
 
@@ -110,38 +113,73 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
       );
       const newTaskColumn = taskColumn;
 
-      const newBoards = boards.map((board) => {
-        if (board.id === id) {
-          return {
-            ...board,
-            columns: board.columns.map((column) => {
-              if (column.id === prevTaskColumn?.id) {
-                return {
-                  ...column,
-                  tasks: column.tasks.filter(
-                    (task) => task.id !== currentTask?.id
-                  ),
-                };
-              } else if (column.id === newTaskColumn?.id) {
-                return {
-                  ...column,
-                  tasks: [
-                    ...column.tasks,
-                    {
-                      ...currentTask,
-                      title: taskTitle,
-                      description: taskDescription,
-                      subtasks,
-                    },
-                  ],
-                };
-              }
-              return column;
-            }),
-          };
-        }
-        return board;
-      });
+      console.log({ prevTaskColumn, newTaskColumn });
+
+      let newBoards;
+
+      if (newTaskColumn !== prevTaskColumn) {
+        newBoards = boards.map((board) => {
+          if (board.id === id) {
+            return {
+              ...board,
+              columns: board.columns.map((column) => {
+                if (column.id === prevTaskColumn?.id) {
+                  return {
+                    ...column,
+                    tasks: column.tasks.filter(
+                      (task) => task.id !== currentTask?.id
+                    ),
+                  };
+                } else if (column.id === newTaskColumn?.id) {
+                  return {
+                    ...column,
+                    tasks: [
+                      ...column.tasks,
+                      {
+                        ...currentTask,
+                        title: taskTitle,
+                        description: taskDescription,
+                        subtasks,
+                      },
+                    ],
+                  };
+                }
+                return column;
+              }),
+            };
+          }
+          return board;
+        });
+      } else {
+        newBoards = boards.map((board) => {
+          if (board.id === id) {
+            return {
+              ...board,
+              columns: board.columns.map((column) => {
+                if (column.id === newTaskColumn?.id) {
+                  return {
+                    ...column,
+                    tasks: column.tasks.map((task) => {
+                      if (task.id === currentTask?.id) {
+                        return {
+                          ...task,
+                          title: taskTitle,
+                          description: taskDescription,
+                          subtasks,
+                          id: task.id,
+                        };
+                      }
+                      return task;
+                    }),
+                  };
+                }
+                return column;
+              }),
+            };
+          }
+          return board;
+        });
+      }
 
       setBoards(newBoards as any);
       setModal(undefined);
