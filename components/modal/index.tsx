@@ -37,7 +37,7 @@ const Modal = ({ board }: ModalProps) => {
           }}
         >
           <div
-            className="w-[480px] min-h-[250px] bg-[#2B2C37] rounded-lg p-6 mx-2 sm:p-8"
+            className="w-[480px] min-h-[250px] bg-white dark:bg-[#2b2c37] rounded-lg p-6 mx-2 sm:p-8"
             ref={ref}
           >
             {modal === "task-create" && <TaskCreateModal {...board} />}

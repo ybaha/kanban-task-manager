@@ -137,17 +137,20 @@ const BoardModal = () => {
     <div>
       <div className="flex flex-col">
         <div className="flex flex-col gap-1 my-4">
-          <h2 className="text-lg font-semibold mb-6">
+          <h2 className="text-lg font-semibold mb-6 text-gray-800 dark:text-white">
             {isCreateBoard ? "Create Board" : "Edit Board"}
           </h2>
-          <label htmlFor="board-title" className="text-sm">
+          <label
+            htmlFor="board-title"
+            className="text-sm text-gray-500 font-semibold dark:text-white"
+          >
             Board name
           </label>
           <input
             type="text"
             name="board-title"
             id="board-title"
-            className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm"
+            className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm text-dark dark:text-white"
             defaultValue={isCreateBoard ? "" : currentBoard?.title}
             onChange={(e) => {
               if (isCreateBoard) {
@@ -172,7 +175,9 @@ const BoardModal = () => {
             }}
           />
         </div>
-        <label className="mt-4 text-sm font-semibold">Columns</label>
+        <label className="mt-4 text-sm font-semibold text-gray-500 dark:text-white">
+          Columns
+        </label>
         <div>
           {currentTempBoard?.columns.map((column, idx) => (
             <div key={idx} className="flex w-full mt-2">
@@ -181,7 +186,7 @@ const BoardModal = () => {
                 type="text"
                 name="subtask-title"
                 id="subtask-title"
-                className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
+                className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
                 defaultValue={column.title}
                 onChange={(e) => {
                   console.log(currentTempBoard?.columns);
@@ -279,7 +284,7 @@ const BoardModal = () => {
           ))}
         </div>
         <button
-          className="bg-white rounded-full text-[#575FC6] py-2 text-sm font-semibold mt-4"
+          className="bg-gray-100 rounded-full text-[#575FC6] py-2 text-sm font-semibold mt-4"
           type="button"
           onClick={() => addColumn()}
         >
@@ -288,14 +293,14 @@ const BoardModal = () => {
 
         <div className="flex w-full gap-8 mt-6">
           <button
-            className="bg-[#575FC6] text-white rounded-full py-2 text-sm font-semibold mt-2 flex-1"
+            className="bg-[#575FC6]  dark:text-white rounded-full py-2 text-sm font-semibold mt-2 flex-1"
             type="button"
             onClick={() => handleSave()}
           >
             Save Changes
           </button>
           <button
-            className="bg-white rounded-full text-[#575FC6] py-2 text-sm font-semibold mt-2 flex-1"
+            className="bg-gray-100 dark:bg-white rounded-full text-[#575FC6] py-2 text-sm font-semibold mt-2 flex-1"
             type="button"
             onClick={() => setModal(undefined)}
           >

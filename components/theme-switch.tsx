@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme();
   return (
-    <div className="flex justify-center items-center max-h-[64px] py-3 flex-1 mx-4 gap-2 bg-[#22232E] rounded-lg">
+    <div className="flex justify-center items-center max-h-[64px] py-3 flex-1 mx-4 gap-2 bg-[#F4F7FD]  dark:bg-[#22232E] rounded-lg">
       <Image
         src="/assets/icon-light-theme.svg"
         alt=""

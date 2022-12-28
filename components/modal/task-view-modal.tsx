@@ -2,13 +2,20 @@ import { Board, Column, SubTask, Task } from "@customTypes/data";
 import { useDataStore } from "@store/data";
 import { useModalStore } from "@store/modal";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
-import React, { useCallback, useMemo, useState } from "react";
+import Image from "next/image";
+import IconEdit from "public/assets/icon-edit";
+import IconTrashCan from "public/assets/icon-trash-can";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
 type Props = {} & Board;
 
 const TaskCreateModal = (board: Props) => {
   const { boards, setBoards, currentBoard, setCurrentBoard } = useDataStore();
-  const { setModal, modalData } = useModalStore();
+  const { setModal, modalData, setModalData } = useModalStore();
+  const [showMore, setShowMore] = useState(false);
+  const showMoreRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(showMoreRef, () => setShowMore(false));
 
   const currentColumn = boards.find((b) => b.id === board.id);
 
@@ -120,14 +127,66 @@ const TaskCreateModal = (board: Props) => {
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <div className="w-full flex justify-between">
-        <h4 className="font-semibold text-lg">{currentTask?.title}</h4>
-        <div onClick={() => handleTaskRemove()}>remove</div>
+        <h4 className="font-semibold text-lg text-black dark:text-white">
+          {currentTask?.title}
+        </h4>
+        <div className="group relative">
+          <div
+            className="flex items-center justify-center w-4 cursor-pointer"
+            onClick={() => setShowMore(!showMore)}
+          >
+            <Image
+              src="/assets/icon-vertical-ellipsis.svg"
+              width={4}
+              height={24}
+              alt="more options"
+            />
+          </div>
+          {showMore && (
+            <div
+              ref={showMoreRef}
+              className="absolute right-0 p-4 flex flex-col w-36  bg-[#2B2C37] border border-gray-100 dark:border-gray-800 shadow rounded-lg"
+            >
+              <div
+                className="text-sm text-gray-400 dark:text-white flex cursor-pointer items-center"
+                onClick={() => {
+                  setModal("task-create");
+                  setModalData({
+                    modalTitle: "Edit Task",
+                    taskId: currentTask?.id,
+                  });
+                }}
+              >
+                {/* <IconEdit className="fill-black dark:fill-white cursor-pointer w-5 h-5" /> */}
+                Edit Task
+              </div>
+              <div
+                className="text-sm text-red-500 flex items-center cursor-pointer mt-4"
+                onClick={() => {
+                  setModal("confirmation");
+                  setModalData({
+                    modalTitle: "Delete Task",
+                    modalDescription:
+                      "Are you sureyou want to delete this task?",
+                    taskId: currentTask?.id,
+                  });
+                }}
+              >
+                Delete Task
+                {/* <IconTrashCan className="fill-black dark:fill-white cursor-pointer"></IconTrashCan> */}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      <p className="mt-4 text-sm text-gray-400">{currentTask?.description}</p>
+      <p className="mt-4 text-sm text-gray-500">{currentTask?.description}</p>
       {currentTask?.subtasks && (
         <div className="flex flex-col gap-1 my-4">
-          <label htmlFor="subtask-title" className="text-sm">
+          <label
+            htmlFor="subtask-title"
+            className="text-xs font-semibold text-gray-400 dark:text-white flex items-center gap-2"
+          >
             {`Subtasks (${completedSubtasks?.length} of ${currentTask?.subtasks.length})`}
           </label>
           <div className="flex flex-col max-h-[300px] overflow-y-scroll">
@@ -136,7 +195,7 @@ const TaskCreateModal = (board: Props) => {
                 <div className="flex items-center w-full">
                   <label
                     htmlFor={`cb-${idx}`}
-                    className="text-sm font-medium bg-gray-700 p-2 rounded-lg outline-none focus:outline-none text-gray-900 dark:text-gray-300 flex items-center flex-1 w-full"
+                    className="text-sm font-medium bg-gray-100 dark:bg-gray-700 p-2 rounded-lg outline-none focus:outline-none text-gray-900 dark:text-gray-300 flex items-center flex-1 w-full"
                   >
                     <input
                       autoFocus={idx === 0}
@@ -158,16 +217,25 @@ const TaskCreateModal = (board: Props) => {
                         }
                       }}
                     />
-                    <span className="ml-4">{subtask.title}</span>
+                    <span
+                      className={`ml-4 text-gray-600 dark:text-gray-200 ${
+                        subtask.iscompleted ? "line-through" : ""
+                      }`}
+                    >
+                      {subtask.title}
+                    </span>
                   </label>
                 </div>
               </div>
             ))}
           </div>
-          <h5 className="text-sm mt-4">Current status</h5>
+          <h5 className="text-xs font-semibold text-gray-400 dark:text-white flex items-center gap-2 mt-4">
+            Current status
+          </h5>
           <select
-            className="bg-[#2B2C37] border border-gray-700 p-2 text-sm rounded-lg text-white"
+            className="bg-white dark:bg-[#2b2c37] border border-gray-200 dark:border-gray-700 p-2 text-sm rounded-lg text-black dark:text-white"
             onChange={handleColumnChange}
+            disabled
           >
             {board.columns.map((column) => (
               <option

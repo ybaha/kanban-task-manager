@@ -4,6 +4,7 @@ import { useModalStore } from "@store/modal";
 import Nav from "./nav";
 import Image from "next/image";
 import { useOnClickOutside } from "@utils/useOnClickOutside";
+import { useTheme } from "next-themes";
 
 type HeaderProps = {
   showSidebar: boolean;
@@ -12,32 +13,53 @@ type HeaderProps = {
 
 const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
   const moreRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
   const { currentBoard } = useDataStore();
   const { setModal, setModalData } = useModalStore();
-  const addNewTask = () => {};
   const [showMore, setShowMore] = useState(false);
 
   useOnClickOutside(moreRef, () => setShowMore(false));
 
   return (
-    <header className="flex justify-start bg-[#2B2C37] dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
+    <header className="flex justify-start bg-white dark:bg-[#2b2c37] dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
       <div
-        className={`desktop transition-all duration-300 h-full flex ${
+        className={`desktop transition-all  h-full flex ${
           showSidebar ? "w-[280px] min-w-[280px]" : "w-0"
         }`}
       >
+        {theme === "dark" ? (
+          <Image
+            src="/assets/logo-light.svg"
+            width={150}
+            height={100}
+            alt=""
+            style={{ objectFit: "contain" }}
+            className="ml-4 cursor-pointer"
+          />
+        ) : (
+          <Image
+            src="/assets/logo-dark.svg"
+            width={150}
+            height={100}
+            alt=""
+            style={{ objectFit: "contain" }}
+            className="ml-4 cursor-pointer"
+          />
+        )}
+      </div>
+      <div className="flex mobile justify-center items-center">
         <Image
-          src="/assets/logo-light.svg"
-          width={150}
-          height={100}
+          src="/assets/logo-mobile.svg"
+          width={28}
+          height={28}
           alt=""
           style={{ objectFit: "contain" }}
           className="ml-4 cursor-pointer"
-        />
+        ></Image>
       </div>
-      <div className="flex relative px-4 border-l transition-all duration 300 border-gray-700 justify-between w-full items-center">
+      <div className="flex relative px-4  transition-all  border-gray-200 dark:border-gray-700 justify-between w-full items-center">
         <div className="flex items-center">
-          <h1 className="font-semibold text-xl ml-4">
+          <h1 className="font-semibold text-xl sm:ml-4 text-black dark:text-white">
             {currentBoard?.title || ""}
           </h1>
           <span onClick={() => setShowSidebar(!showSidebar)} className="">
@@ -46,14 +68,14 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
               width={12}
               height={12}
               alt=""
-              className={`ml-2 cursor-pointer transition-all duration-300 ${
+              className={`mobile ml-2 cursor-pointer transition-all  ${
                 showSidebar ? "rotate-180" : ""
               }`}
             ></Image>
           </span>
         </div>
         {showSidebar && (
-          <div className="mobile absolute min-w-[280px] top-[260px] sm:top-[300px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-[#2B2C37] pt-8 pb-4 rounded-lg">
+          <div className="mobile absolute min-w-[280px] top-[72px] sm:top-[92px] left-1/2 transform -translate-x-1/2 z-20 bg-white dark:bg-[#2b2c37] pt-8 pb-4 rounded-lg">
             <Nav />
           </div>
         )}
@@ -65,7 +87,6 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
               else {
                 setModal("board");
                 setModalData({
-                  // boardId: currentBoard?.id,
                   modalTitle: "Edit Board",
                 });
               }
@@ -92,9 +113,9 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
           </div>
 
           {showMore && (
-            <div className="absolute w-44 h-24 bg-[#22232E] shadow-lg shadow-[#00000026] rounded-lg top-14 sm:top-[72px] lg:top-[86px] flex flex-col px-6 justify-around">
+            <div className="absolute w-44 h-24 bg-[#EAEFFA] dark:bg-[#22232E] shadow-lg shadow-[#00000026] rounded-lg top-14 sm:top-[72px] lg:top-[86px] flex flex-col px-6 justify-around">
               <span
-                className="text-sm hover:underline cursor-pointer text-gray-200"
+                className="text-sm hover:underline cursor-pointer text-gray-600 dark:text-gray-200"
                 onClick={() => {
                   setModal("board");
                   setModalData({

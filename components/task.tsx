@@ -27,12 +27,14 @@ const Task = ({ title, index, subtasks, id, columnId }: TaskProps) => {
               taskId: id,
             });
           }}
-          className="group rounded-lg bg-[#2B2C37] px-4 py-5 min-h-[92px] cursor-pointer shadow-md shadow-[#40415823] hover:shadow-[#40415836] flex flex-col justify-center"
+          className="group rounded-lg bg-white dark:bg-[#2b2c37] px-4 py-5 min-h-[92px] cursor-pointer shadow-md shadow-[#40415823] hover:shadow-[#40415836] flex flex-col justify-center"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <h5 className="font-semibold group-hover:text-[#575FC6]">{title}</h5>
+          <h5 className="font-semibold group-hover:text-[#575FC6] text-black dark:text-white">
+            {title}
+          </h5>
           <p className="text-xs font-semibold text-gray-400 mt-1">
             {subtasks.length
               ? subtasksCompleted + " of " + subtasksLength + " subtasks"

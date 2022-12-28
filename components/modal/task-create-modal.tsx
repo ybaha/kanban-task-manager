@@ -10,6 +10,7 @@ import { useRef } from "react";
 type Props = {} & Board;
 
 const TaskCreateModal = ({ id, title, columns }: Props) => {
+  const scrollContainer = useRef<HTMLDivElement>(null);
   const { boards, setBoards } = useDataStore();
   const { setModal } = useModalStore();
   const [subtaskInput, setSubtaskInput] = useState<string>("");
@@ -30,6 +31,16 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
       ]);
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (scrollContainer.current) {
+        scrollContainer.current.scrollTop =
+          scrollContainer.current.scrollHeight;
+      }
+    }, 1);
+    return () => clearInterval(interval);
+  }, [subtasks]);
 
   const removeSubtask = (id: number) => {
     setSubtasks(subtasks.filter((subtask) => subtask.id !== id));
@@ -78,7 +89,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
     });
 
     setBoards(newBoards);
-    setModal("");
+    setModal(undefined);
   };
 
   useEffect(() => {
@@ -86,10 +97,22 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
   }, [subtasks]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h4 className="font-semibold text-lg">Add New Task</h4>
+    <form
+      onSubmit={handleSubmit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+      }}
+    >
+      <h4 className="font-semibold text-lg text-black dark:text-white">
+        Add New Task
+      </h4>
       <div className="flex flex-col gap-1 my-4">
-        <label htmlFor="task-title" className="text-sm">
+        <label
+          htmlFor="task-title"
+          className="text-xs font-semibold text-gray-400 dark:text-white"
+        >
           Title
         </label>
         <input
@@ -97,64 +120,80 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
           type="text"
           name="task-title"
           id="task-title"
-          className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm"
+          className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm"
           onChange={(e) => setTaskTitle(e.target.value)}
         />
       </div>
       <div className="flex flex-col gap-1 my-4">
-        <label htmlFor="description" className="text-sm">
+        <label
+          htmlFor="description"
+          className="text-xs font-semibold text-gray-400 dark:text-white"
+        >
           Description
         </label>
         <textarea
           name="description"
           id="description"
-          className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm resize-none h-20"
+          className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm resize-none h-20"
           placeholder="e.g Study for exam tomorrow"
           onChange={(e) => setTaskDescription(e.target.value)}
         />
       </div>
       <div className="flex flex-col gap-1 my-4">
-        <label htmlFor="subtask-title" className="text-sm">
+        <label
+          htmlFor="subtask-title"
+          className="text-xs font-semibold text-gray-400 dark:text-white"
+        >
           Subtask
         </label>
         <div className="flex flex-col">
-          {subtasks.map((subtask, idx) => (
-            <div key={idx} className="flex w-full mt-2">
-              <input
-                type="text"
-                name="subtask-title"
-                id="subtask-title"
-                className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
-                defaultValue={subtask.title}
-                onChange={(e) => {
-                  const newSubtasks = [...subtasks];
-                  newSubtasks[idx].title = e.target.value;
-                  setSubtasks(newSubtasks);
-                }}
-              />
-              <div
-                onClick={() => removeSubtask(subtask.id)}
-                className="flex justify-center items-center ml-4 cursor-pointer"
-              >
-                <IconCross />
+          <div
+            ref={scrollContainer}
+            className="max-h-[140px] overflow-y-scroll"
+          >
+            {subtasks.map((subtask, idx) => (
+              <div key={idx} className="flex w-full mt-2">
+                <input
+                  type="text"
+                  name="subtask-title"
+                  id="subtask-title"
+                  className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
+                  defaultValue={subtask.title}
+                  onChange={(e) => {
+                    const newSubtasks = [...subtasks];
+                    newSubtasks[idx].title = e.target.value;
+                    setSubtasks(newSubtasks);
+                  }}
+                />
+                <div
+                  onClick={() => removeSubtask(subtask.id)}
+                  className="flex justify-center items-center ml-4 cursor-pointer"
+                >
+                  <IconCross />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
           <div className="flex w-full mt-2">
             <input
               type="text"
               name="subtask-title"
               id="subtask-title"
-              className="bg-[#2B2C37] rounded-lg border border-gray-700 p-2 text-sm flex-1 w-full"
+              className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
               placeholder="e.g Set a timer"
               value={subtaskInput}
               onChange={(e) => setSubtaskInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  addSubtask();
+                }
+              }}
             />
             {/* <div>close</div> */}
           </div>
         </div>
         <button
-          className="bg-white text-[#575FC6] rounded-full py-2 text-sm font-semibold mt-2"
+          className="bg-gray-100 dark:bg-white text-[#575FC6] rounded-full py-2 text-sm font-semibold mt-2"
           type="button"
           onClick={() => addSubtask()}
         >
@@ -166,7 +205,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
             Status
           </label>
           <select
-            className="bg-[#2B2C37] border border-gray-700 p-2 text-sm rounded-lg text-white"
+            className="bg-white dark:bg-[#2b2c37] border border-gray-200 dark:border-gray-700 p-2 text-sm rounded-lg text-black dark:text-white"
             name="column-title"
             onChange={(e) => {
               setTaskColumn(

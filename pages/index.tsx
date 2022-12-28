@@ -24,7 +24,7 @@ const Index = () => {
         setShowSidebar={setShowSidebar}
       ></Header>
       <div
-        className="flex items-center bg-[#22232E]"
+        className="flex items-center bg-[#EAEFFA] dark:bg-[#22232E]"
         style={{
           width: showSidebar
             ? "100%"
@@ -44,7 +44,7 @@ const Index = () => {
           ></div>
         )}
         <main
-          className={`transition bg-[#20212C] overflow-scroll duration-300 p-6 h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)] lg:h-[calc(100vh-96px)] ${
+          className={`transition bg-[#F4F7FD] dark:bg-[#20212C] overflow-scroll  p-6 h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)] lg:h-[calc(100vh-96px)] ${
             !showSidebar && !isMobile ? "-translate-x-[280px]" : "w-full"
           }`}
           style={{

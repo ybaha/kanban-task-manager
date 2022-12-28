@@ -31,7 +31,7 @@ const BoardColumn = ({
               setModal("board");
               if (!isCreateNewBoard) setModalData({ columnId: id });
             }}
-            className="h-full min-h-[500px] mt-9 overflow-x-visible bg-[#22232E] flex justify-center items-center cursor-pointer rounded-lg"
+            className="h-full min-h-[500px] mt-9 overflow-x-visible bg-[#EAEFFA] dark:bg-[#22232E] flex justify-center items-center cursor-pointer rounded-lg"
             ref={provided.innerRef}
             style={
               !isCreateNewBoard

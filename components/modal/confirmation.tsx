@@ -21,6 +21,47 @@ const ConfirmationModal = () => {
       setCurrentBoard(newBoards[0]);
       setModal(undefined);
     }
+
+    if (typeof modalData?.columnId === "number") {
+      console.log("delete column");
+
+      const newBoards = boards.map((board) => {
+        if (board.id === currentBoard?.id) {
+          return {
+            ...board,
+            columns: board.columns.filter(
+              (column) => column.id !== modalData?.columnId
+            ),
+          };
+        }
+        return board;
+      });
+      setBoards(newBoards);
+      setModal(undefined);
+    }
+
+    if (typeof modalData?.taskId === "number") {
+      console.log("delete task");
+
+      const newBoards = boards.map((board) => {
+        if (board.id === currentBoard?.id) {
+          return {
+            ...board,
+            columns: board.columns.map((column) => {
+              return {
+                ...column,
+                tasks: column.tasks.filter(
+                  (task) => task.id !== modalData?.taskId
+                ),
+              };
+            }),
+          };
+        }
+        return board;
+      });
+      setBoards(newBoards);
+      setModal(undefined);
+    }
   };
 
   return (
@@ -33,12 +74,15 @@ const ConfirmationModal = () => {
       </p>
       <div className="flex justify-between">
         <button
-          className="bg-red-400 hover:bg-red-500 flex-1 font-semibold text-sm text-white px-4 py-2 rounded-full mt-8"
+          className="bg-red-400 hover:bg-red-500 flex-1 font-semibold text-sm text-black dark:text-white px-4 py-2 rounded-full mt-8"
           onClick={() => handleConfirm()}
         >
           Delete
         </button>
-        <button className="bg-white hover:bg-gray-100 flex-1 font-semibold text-sm text-[#5543ca] px-4 py-2 rounded-full mt-8 ml-4">
+        <button
+          onClick={() => setModal(undefined)}
+          className="bg-white hover:bg-gray-100 flex-1 font-semibold text-sm text-[#5543ca] px-4 py-2 rounded-full mt-8 ml-4"
+        >
           Cancel
         </button>
       </div>
