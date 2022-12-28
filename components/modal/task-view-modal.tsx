@@ -17,9 +17,11 @@ const TaskCreateModal = (board: Props) => {
 
   useOnClickOutside(showMoreRef, () => setShowMore(false));
 
-  const currentColumn = boards.find((b) => b.id === board.id);
+  const currentColumn = currentBoard?.columns.find(
+    (column) => column.id === modalData?.columnId
+  );
 
-  const currentTask = currentColumn?.columns
+  const currentTask = currentBoard?.columns
     .find((column) => column.id === modalData?.columnId)
     ?.tasks.find((task) => task.id === modalData?.taskId);
 
@@ -154,6 +156,7 @@ const TaskCreateModal = (board: Props) => {
                   setModalData({
                     modalTitle: "Edit Task",
                     taskId: currentTask?.id,
+                    columnId: currentColumn?.id,
                   });
                 }}
               >

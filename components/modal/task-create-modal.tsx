@@ -11,15 +11,27 @@ type Props = {} & Board;
 
 const TaskCreateModal = ({ id, title, columns }: Props) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
-  const { boards, setBoards } = useDataStore();
-  const { setModal } = useModalStore();
+  const { boards, setBoards, currentBoard } = useDataStore();
+  const { setModal, modalData } = useModalStore();
+
+  const isCreateTask = modalData?.modalTitle !== "Edit Task";
+  const currentTask = columns
+    .find((column) => column.id === modalData?.columnId)
+    ?.tasks.find((task) => task.id === modalData?.taskId);
+
   const [subtaskInput, setSubtaskInput] = useState<string>("");
-  const [subtasks, setSubtasks] = useState<SubTask[]>([]);
-  const [taskTitle, setTaskTitle] = useState<string>("");
-  const [taskDescription, setTaskDescription] = useState<string>("");
-  const [taskColumn, setTaskColumn] = useState<Column | undefined>(
-    columns[0] || undefined
+  const [subtasks, setSubtasks] = useState<SubTask[]>(
+    currentTask?.subtasks || []
   );
+  const [taskTitle, setTaskTitle] = useState<string>(currentTask?.title || "");
+  const [taskDescription, setTaskDescription] = useState<string>(
+    currentTask?.description || ""
+  );
+  const [taskColumn, setTaskColumn] = useState<Column | undefined>(
+    columns.find((column) => column.id === modalData?.columnId) || undefined
+  );
+
+  console.log({ modalData, currentTask });
 
   const addSubtask = () => {
     if (subtaskInput) {
@@ -51,45 +63,89 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
 
     if (!taskTitle || !taskColumn) return;
 
-    // get the highest task id in the columns
-    let highestTaskId = 0;
-    columns.forEach((column) => {
-      column.tasks.forEach((task) => {
-        if (task.id > highestTaskId) {
-          highestTaskId = task.id;
-        }
+    if (isCreateTask) {
+      // get the highest task id in the columns
+      let highestTaskId = 0;
+      columns.forEach((column) => {
+        column.tasks.forEach((task) => {
+          if (task.id > highestTaskId) {
+            highestTaskId = task.id;
+          }
+        });
       });
-    });
 
-    const newTask: Task = {
-      id: highestTaskId + 1,
-      title: taskTitle,
-      description: taskDescription,
-      subtasks,
-    };
+      const newTask: Task = {
+        id: highestTaskId + 1,
+        title: taskTitle,
+        description: taskDescription,
+        subtasks,
+      };
 
-    const newColumns = columns.map((column) => {
-      if (column.title === taskColumn.title) {
-        return {
-          ...column,
-          tasks: [...column.tasks, newTask],
-        };
-      }
-      return column;
-    });
+      const newColumns = columns.map((column) => {
+        if (column.title === taskColumn.title) {
+          return {
+            ...column,
+            tasks: [...column.tasks, newTask],
+          };
+        }
+        return column;
+      });
 
-    const newBoards = boards.map((board) => {
-      if (board.id === id) {
-        return {
-          ...board,
-          columns: newColumns,
-        };
-      }
-      return board;
-    });
+      const newBoards = boards.map((board) => {
+        if (board.id === id) {
+          return {
+            ...board,
+            columns: newColumns,
+          };
+        }
+        return board;
+      });
 
-    setBoards(newBoards);
-    setModal(undefined);
+      setBoards(newBoards);
+      setModal(undefined);
+    } else {
+      // edit task considering a column change
+      const prevTaskColumn = columns.find(
+        (column) => column.id === modalData?.columnId
+      );
+      const newTaskColumn = taskColumn;
+
+      const newBoards = boards.map((board) => {
+        if (board.id === id) {
+          return {
+            ...board,
+            columns: board.columns.map((column) => {
+              if (column.id === prevTaskColumn?.id) {
+                return {
+                  ...column,
+                  tasks: column.tasks.filter(
+                    (task) => task.id !== currentTask?.id
+                  ),
+                };
+              } else if (column.id === newTaskColumn?.id) {
+                return {
+                  ...column,
+                  tasks: [
+                    ...column.tasks,
+                    {
+                      ...currentTask,
+                      title: taskTitle,
+                      description: taskDescription,
+                      subtasks,
+                    },
+                  ],
+                };
+              }
+              return column;
+            }),
+          };
+        }
+        return board;
+      });
+
+      setBoards(newBoards as any);
+      setModal(undefined);
+    }
   };
 
   useEffect(() => {
@@ -106,7 +162,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
       }}
     >
       <h4 className="font-semibold text-lg text-black dark:text-white">
-        Add New Task
+        {isCreateTask ? "Create Task" : "Edit Task"}
       </h4>
       <div className="flex flex-col gap-1 my-4">
         <label
@@ -122,6 +178,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
           id="task-title"
           className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm"
           onChange={(e) => setTaskTitle(e.target.value)}
+          defaultValue={currentTask?.title || ""}
         />
       </div>
       <div className="flex flex-col gap-1 my-4">
@@ -137,6 +194,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
           className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm resize-none h-20"
           placeholder="e.g Study for exam tomorrow"
           onChange={(e) => setTaskDescription(e.target.value)}
+          defaultValue={currentTask?.description || ""}
         />
       </div>
       <div className="flex flex-col gap-1 my-4">
@@ -218,7 +276,11 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
             }}
           >
             {columns.map((column, idx) => (
-              <option key={column.id} value={column.id} selected={idx === 0}>
+              <option
+                key={column.id}
+                value={column.id}
+                selected={taskColumn?.id === column.id}
+              >
                 {column.title}
               </option>
             ))}
@@ -229,7 +291,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
           className="bg-[#575FC6] text-white rounded-full py-2 text-sm font-semibold mt-4"
           type="submit"
         >
-          Create Task
+          {isCreateTask ? "Create Task" : "Edit Task"}
         </button>
       </div>
     </form>
