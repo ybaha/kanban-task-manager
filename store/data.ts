@@ -13,7 +13,7 @@ type DataStore = {
 export const useDataStore = create<DataStore>()(
   persist(
     (set, get) => ({
-      boards: [],
+      boards: demoData.boards,
       setBoards: (boards) =>
         set({
           boards,

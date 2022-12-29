@@ -20,7 +20,7 @@ const Nav = () => {
         {boards.map((board) => (
           <div
             key={board.id}
-            className={`flex items-center hover:bg-gray-100 dark:hover:bg-white px-2 py-3 pl-6 rounded-r-full cursor-pointer group font-semibold ${
+            className={`flex items-center hover:bg-[#575FC6] dark:hover:bg-white px-2 py-3 pl-6 rounded-r-full cursor-pointer group font-semibold ${
               currentBoard?.id === board.id ? "bg-[#575FC6] text-white" : ""
             }`}
             onClick={() =>
