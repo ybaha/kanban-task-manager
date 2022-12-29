@@ -22,11 +22,11 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
   return (
     <header className="flex justify-start bg-white dark:bg-[#2b2c37] dark:bg-dark-gray h-16 sm:h-20 lg:h-24 w-full flex-shrink-0">
       <div
-        className={`desktop transition-all  h-full flex ${
+        className={`desktop transition-all flex items-center ${
           showSidebar ? "w-[280px] min-w-[280px]" : "w-0"
         }`}
       >
-        <Logos></Logos>
+        {showSidebar && <Logos></Logos>}
       </div>
       <div className="flex mobile justify-center items-center">
         <Image
@@ -34,7 +34,6 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
           width={28}
           height={28}
           alt=""
-          style={{ objectFit: "contain" }}
           className="ml-4 cursor-pointer"
         ></Image>
       </div>
@@ -136,27 +135,23 @@ const Logos = () => {
 
   if (!theme) return null;
   return (
-    <>
+    <div className="h-[50px] w-[150px] flex justify-center items-center pl-2">
       {theme === "dark" ? (
-        <Image
+        <img
           src="/assets/logo-light.svg"
-          width={150}
-          height={100}
           alt=""
-          style={{ objectFit: "contain" }}
-          className="ml-4 cursor-pointer"
+          className="ml-4 cursor-pointer object-contain"
         />
       ) : (
         <Image
           src="/assets/logo-dark.svg"
           width={150}
-          height={100}
+          height={50}
           alt=""
-          style={{ objectFit: "contain" }}
           className="ml-4 cursor-pointer"
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -86,6 +86,7 @@ const TaskCreateModal = (board: Props) => {
 
     setBoards(newBoards);
     setCurrentBoard(newBoards.find((board) => board.id === currentBoard?.id)!);
+    setModal(undefined);
   };
 
   const handleCheckboxChange = (checked: boolean, subtask: SubTask) => {
@@ -238,7 +239,7 @@ const TaskCreateModal = (board: Props) => {
           <select
             className="bg-white dark:bg-[#2b2c37] border border-gray-200 dark:border-gray-700 p-2 text-sm rounded-lg text-black dark:text-white"
             onChange={handleColumnChange}
-            disabled
+            // disabled
           >
             {board.columns.map((column) => (
               <option
