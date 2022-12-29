@@ -30,6 +30,7 @@ const BoardColumn = ({
             onClick={() => {
               setModal("board");
               if (!isCreateNewBoard) setModalData({ columnId: id });
+              else setModalData({ modalTitle: "Create Board" });
             }}
             className="h-full min-h-[500px] mt-9 overflow-x-visible bg-[#EAEFFA] dark:bg-[#22232E] flex justify-center items-center cursor-pointer rounded-lg"
             ref={provided.innerRef}

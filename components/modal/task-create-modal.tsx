@@ -214,7 +214,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
           type="text"
           name="task-title"
           id="task-title"
-          className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm"
+          className="bg-white dark:bg-[#2b2c37] text-black dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm"
           onChange={(e) => setTaskTitle(e.target.value)}
           defaultValue={currentTask?.title || ""}
         />
@@ -229,7 +229,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
         <textarea
           name="description"
           id="description"
-          className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm resize-none h-20"
+          className="bg-white dark:bg-[#2b2c37] text-black dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm resize-none h-20"
           placeholder="e.g Study for exam tomorrow"
           onChange={(e) => setTaskDescription(e.target.value)}
           defaultValue={currentTask?.description || ""}
@@ -253,7 +253,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
                   type="text"
                   name="subtask-title"
                   id="subtask-title"
-                  className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
+                  className="bg-white dark:bg-[#2b2c37] text-black dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
                   defaultValue={subtask.title}
                   onChange={(e) => {
                     const newSubtasks = [...subtasks];
@@ -275,7 +275,7 @@ const TaskCreateModal = ({ id, title, columns }: Props) => {
               type="text"
               name="subtask-title"
               id="subtask-title"
-              className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
+              className="bg-white dark:bg-[#2b2c37] text-black dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
               placeholder="e.g Set a timer"
               value={subtaskInput}
               onChange={(e) => setSubtaskInput(e.target.value)}

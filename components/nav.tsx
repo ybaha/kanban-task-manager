@@ -65,6 +65,9 @@ const Nav = () => {
           </div>
         </div>
       </div>
+      <div className="w-full mobile mt-2">
+        <ThemeSwitch></ThemeSwitch>
+      </div>
     </div>
   );
 };

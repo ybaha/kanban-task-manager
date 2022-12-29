@@ -13,7 +13,6 @@ type HeaderProps = {
 
 const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
   const moreRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
   const { currentBoard } = useDataStore();
   const { setModal, setModalData } = useModalStore();
   const [showMore, setShowMore] = useState(false);
@@ -27,25 +26,7 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
           showSidebar ? "w-[280px] min-w-[280px]" : "w-0"
         }`}
       >
-        {theme === "dark" ? (
-          <Image
-            src="/assets/logo-light.svg"
-            width={150}
-            height={100}
-            alt=""
-            style={{ objectFit: "contain" }}
-            className="ml-4 cursor-pointer"
-          />
-        ) : (
-          <Image
-            src="/assets/logo-dark.svg"
-            width={150}
-            height={100}
-            alt=""
-            style={{ objectFit: "contain" }}
-            className="ml-4 cursor-pointer"
-          />
-        )}
+        <Logos></Logos>
       </div>
       <div className="flex mobile justify-center items-center">
         <Image
@@ -146,6 +127,36 @@ const Header = ({ showSidebar, setShowSidebar }: HeaderProps) => {
         </div>
       </div>
     </header>
+  );
+};
+
+const Logos = () => {
+  const { theme } = useTheme();
+  console.log({ theme });
+
+  if (!theme) return null;
+  return (
+    <>
+      {theme === "dark" ? (
+        <Image
+          src="/assets/logo-light.svg"
+          width={150}
+          height={100}
+          alt=""
+          style={{ objectFit: "contain" }}
+          className="ml-4 cursor-pointer"
+        />
+      ) : (
+        <Image
+          src="/assets/logo-dark.svg"
+          width={150}
+          height={100}
+          alt=""
+          style={{ objectFit: "contain" }}
+          className="ml-4 cursor-pointer"
+        />
+      )}
+    </>
   );
 };
 

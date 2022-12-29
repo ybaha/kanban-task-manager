@@ -130,6 +130,7 @@ const BoardModal = () => {
     } else {
       setBoards(tempBoards);
     }
+    setCurrentBoard(currentTempBoard as any);
     setModal(undefined);
   };
 
@@ -150,7 +151,7 @@ const BoardModal = () => {
             type="text"
             name="board-title"
             id="board-title"
-            className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm text-dark dark:text-white"
+            className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm text-black dark:text-white"
             defaultValue={isCreateBoard ? "" : currentBoard?.title}
             onChange={(e) => {
               if (isCreateBoard) {
@@ -186,7 +187,7 @@ const BoardModal = () => {
                 type="text"
                 name="subtask-title"
                 id="subtask-title"
-                className="bg-white dark:bg-[#2b2c37] rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
+                className="bg-white dark:bg-[#2b2c37] text-black dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-sm flex-1 w-full"
                 defaultValue={column.title}
                 onChange={(e) => {
                   console.log(currentTempBoard?.columns);

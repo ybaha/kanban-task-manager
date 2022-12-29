@@ -26,9 +26,7 @@ const Index = () => {
       <div
         className="flex items-center bg-[#EAEFFA] dark:bg-[#22232E]"
         style={{
-          width: showSidebar
-            ? "100%"
-            : `calc(${container?.current?.clientWidth}px + 280px)`,
+          width: "100%",
         }}
         ref={container}
       >
